@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "mesh_objects": 152,
+  "triangles": 425504,
+  "dimensions_m": [
+    1.114440679550171,
+    0.6100836992263794,
+    2.1479999404400587
+  ],
+  "materials": [
+    "Base_Armadura_gris.001",
+    "Base_Articulaciones.001",
+    "Base_Tela_neutra.001"
+  ],
+  "image_textures": 0,
+  "ornamental_curves": 0,
+  "validation": "GLB reimport; meshes, UV, materials, finite geometry, scale, no studio/textures",
+  "stage": "Static base-form study; not a rig or production retopology",
+  "source_preserved": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\PaladinElite\\Source\\PaladinElite.blend"
+}

@@ -1,0 +1,31 @@
+{
+  "asset": "PaladinElite",
+  "method": "Local Blender modelling over user supplied normal paladin",
+  "rigged": false,
+  "animations": 0,
+  "objects": 923,
+  "vertices": 1993182,
+  "materials": [
+    "Elite | age-darkened braid and frayed threads",
+    "Elite | faded ochre embroidered yarn",
+    "Elite | scarf matte walnut wool",
+    "Elite | umber acanthus wool tapestry",
+    "Elite.black",
+    "Elite.dark_steel",
+    "Elite.gold",
+    "Elite.leather",
+    "Elite.steel",
+    "Material_0"
+  ],
+  "limitations": [
+    "Static presentation pose, no rig or skin weights",
+    "Dense presentation geometry; requires retopology and game LODs",
+    "Procedural interpretation of reference; not an exact reconstruction"
+  ],
+  "triangles": 3721278,
+  "dimensions_m": [
+    1.238267421722412,
+    0.6721044182777405,
+    2.182351589202881
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "version": 3,
+  "asset": "PaladinSoldier_Meshy",
+  "generator": "Meshy 6 Lite - Image to 3D",
+  "license": "CC BY 4.0",
+  "source_glb": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Source\\PaladinSoldier_Meshy_Source.glb",
+  "blend": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Source\\PaladinSoldier_Meshy.blend",
+  "fbx": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Exports\\SM_PaladinSoldier_Meshy.fbx",
+  "preview": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Preview\\PaladinSoldier_Meshy.png",
+  "textures": [
+    "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Textures\\Meshy\\T_Paladin_Meshy_BaseColor.png",
+    "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Textures\\Meshy\\T_Paladin_Meshy_ORM.png",
+    "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Textures\\Meshy\\T_Paladin_Meshy_Normal.png"
+  ],
+  "source": {
+    "mesh_count": 1,
+    "material_count": 1,
+    "materials": [
+      "M_Paladin_Meshy"
+    ],
+    "image_count": 3,
+    "images": [
+      "T_Paladin_Meshy_BaseColor",
+      "T_Paladin_Meshy_Normal",
+      "T_Paladin_Meshy_ORM"
+    ],
+    "vertices": 104517,
+    "polygons": 180540,
+    "triangles": 180540,
+    "armatures": [],
+    "animation_count": 0,
+    "bounds_meters": {
+      "minimum": [
+        -0.7608,
+        -0.1929,
+        -0.9515
+      ],
+      "maximum": [
+        0.7565,
+        0.1927,
+        0.9473
+      ],
+      "dimensions": [
+        1.5172,
+        0.3856,
+        1.8988
+      ]
+    }
+  },
+  "prepared": {
+    "mesh_count": 1,
+    "material_count": 1,
+    "materials": [
+      "M_Paladin_Meshy"
+    ],
+    "image_count": 3,
+    "images": [
+      "T_Paladin_Meshy_BaseColor",
+      "T_Paladin_Meshy_Normal",
+      "T_Paladin_Meshy_ORM"
+    ],
+    "vertices": 104517,
+    "polygons": 180540,
+    "triangles": 180540,
+    "armatures": [],
+    "animation_count": 0,
+    "bounds_meters": {
+      "minimum": [
+        -0.799,
+        -0.2031,
+        0.0
+      ],
+      "maximum": [
+        0.799,
+        0.2031,
+        2.0
+      ],
+      "dimensions": [
+        1.5981,
+        0.4061,
+        2.0
+      ]
+    }
+  },
+  "status": "valid",
+  "limitations": [
+    "Malla estatica sin rig ni animaciones",
+    "Generacion a partir de una sola vista frontal",
+    "Requiere retopologia antes de usar como personaje animado definitivo"
+  ]
+}

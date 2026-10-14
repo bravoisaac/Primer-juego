@@ -1,0 +1,35 @@
+# Unreal Engine generated files
+**/Binaries/
+**/DerivedDataCache/
+**/Intermediate/
+**/Saved/
+
+# Visual Studio and IDE files
+.vs/
+.vscode/
+*.VC.db
+*.VC.opendb
+*.sdf
+*.sln
+*.suo
+*.opensdf
+*.opendb
+
+# Generated project files
+*.xcodeproj
+*.xcworkspace
+*.code-workspace
+
+# Local logs, caches and temporary files
+*.log
+*.tmp
+*.temp
+*.blend1
+optix7cache.db*
+__pycache__/
+Thumbs.db
+.DS_Store
+
+# Local developer settings
+**/Config/DefaultEditorPerProjectUserSettings.ini
+

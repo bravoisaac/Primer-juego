@@ -1,0 +1,74 @@
+{
+  "version": 2,
+  "reference_source": "Tres imágenes ortográficas proporcionadas por el usuario",
+  "assets": [
+    {
+      "name": "PaladinSoldier",
+      "fbx": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Exports\\SM_PaladinSoldier.fbx",
+      "mesh_count": 88,
+      "material_count": 7,
+      "materials": [
+        "M_Acero_Bordes",
+        "M_Acero_Desgastado",
+        "M_Bronce_Envejecido",
+        "M_Cota_Malla",
+        "M_Cuero_Oscuro",
+        "M_Interior_Yelmo",
+        "M_Tela_Marron"
+      ],
+      "vertices": 10495,
+      "polygons": 10108,
+      "bounds_meters": {
+        "minimum": [
+          -0.687,
+          -0.245,
+          0.035
+        ],
+        "maximum": [
+          0.687,
+          0.23,
+          2.037
+        ],
+        "dimensions": [
+          1.375,
+          0.475,
+          2.002
+        ]
+      },
+      "status": "valid"
+    },
+    {
+      "name": "PaladinGreatsword",
+      "fbx": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\Paladin\\Exports\\SM_PaladinGreatsword.fbx",
+      "mesh_count": 6,
+      "material_count": 4,
+      "materials": [
+        "M_Acero_Bordes.001",
+        "M_Acero_Desgastado.001",
+        "M_Bronce_Envejecido.001",
+        "M_Cuero_Oscuro.001"
+      ],
+      "vertices": 639,
+      "polygons": 647,
+      "bounds_meters": {
+        "minimum": [
+          -0.258,
+          -0.065,
+          -0.215
+        ],
+        "maximum": [
+          0.258,
+          0.065,
+          1.391
+        ],
+        "dimensions": [
+          0.516,
+          0.13,
+          1.606
+        ]
+      },
+      "status": "valid"
+    }
+  ],
+  "status": "valid"
+}

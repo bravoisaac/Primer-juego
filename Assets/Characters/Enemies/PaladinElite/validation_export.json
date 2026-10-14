@@ -1,0 +1,408 @@
+{
+  "asset": "PaladinElite",
+  "input": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\PaladinElite\\Exports\\PaladinElite.glb",
+  "validation": "GLB binary inspection and clean Blender reimport",
+  "errors": [],
+  "warnings": [],
+  "scope": [
+    "Static presentation geometry",
+    "No rig or animation validation",
+    "Visual correspondence, cloth tears and layered intersections require visual review"
+  ],
+  "container": {
+    "file_bytes": 111651892,
+    "chunks": [
+      {
+        "type": 1313821514,
+        "bytes": 745760
+      },
+      {
+        "type": 5130562,
+        "bytes": 110906104
+      }
+    ],
+    "embedded_images": [
+      {
+        "name": "ElitePBR.Steel.Normal",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1843685
+      },
+      {
+        "name": "ElitePBR.Brass.Color",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1280978
+      },
+      {
+        "name": "ElitePBR.Brass.Roughness",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1125970
+      },
+      {
+        "name": "ElitePBR.Leather.Normal",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 361976
+      },
+      {
+        "name": "ElitePBR.Leather.Color",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 226637
+      },
+      {
+        "name": "ElitePBR.Leather.Roughness",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 245117
+      },
+      {
+        "name": "ElitePBR.Black.Color",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 110547
+      },
+      {
+        "name": "ElitePBR.Steel.Color",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1278700
+      },
+      {
+        "name": "ElitePBR.Steel.Roughness",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1125416
+      },
+      {
+        "name": "Elite_Tapestry_TangentNormal_1K",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 2402544
+      },
+      {
+        "name": "Elite_Tapestry_BaseColor_1K",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1053212
+      },
+      {
+        "name": "Elite_Scarf_WovenNormal_1K",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 3025437
+      },
+      {
+        "name": "Elite_Scarf_CocoaWool_BaseColor_1K",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 835750
+      },
+      {
+        "name": "ElitePBR.DarkSteel.Color",
+        "mime_type": "image/png",
+        "embedded": true,
+        "bytes": 1104201
+      },
+      {
+        "name": "Image_2",
+        "mime_type": "image/jpeg",
+        "embedded": true,
+        "bytes": 2533074
+      },
+      {
+        "name": "Image_0",
+        "mime_type": "image/jpeg",
+        "embedded": true,
+        "bytes": 3041526
+      },
+      {
+        "name": "Image_1",
+        "mime_type": "image/jpeg",
+        "embedded": true,
+        "bytes": 2126129
+      }
+    ],
+    "external_references": [],
+    "materials": [
+      {
+        "name": "Elite.gold",
+        "base_color_texture": true,
+        "metallic_roughness_texture": true,
+        "normal_texture": true,
+        "metallic_factor": 0.8299999833106995,
+        "roughness_factor": 1.0
+      },
+      {
+        "name": "Elite.leather",
+        "base_color_texture": true,
+        "metallic_roughness_texture": true,
+        "normal_texture": true,
+        "metallic_factor": 0,
+        "roughness_factor": 1.0
+      },
+      {
+        "name": "Elite.black",
+        "base_color_texture": true,
+        "metallic_roughness_texture": true,
+        "normal_texture": true,
+        "metallic_factor": 0.10000000149011612,
+        "roughness_factor": 1.0
+      },
+      {
+        "name": "Elite.steel",
+        "base_color_texture": true,
+        "metallic_roughness_texture": true,
+        "normal_texture": true,
+        "metallic_factor": 0.8799999952316284,
+        "roughness_factor": 1.0
+      },
+      {
+        "name": "Elite | age-darkened braid and frayed threads",
+        "base_color_texture": false,
+        "metallic_roughness_texture": false,
+        "normal_texture": false,
+        "metallic_factor": 0,
+        "roughness_factor": 0.9300000071525574
+      },
+      {
+        "name": "Elite | umber acanthus wool tapestry",
+        "base_color_texture": true,
+        "metallic_roughness_texture": false,
+        "normal_texture": true,
+        "metallic_factor": 0,
+        "roughness_factor": 0.9100000262260437
+      },
+      {
+        "name": "Elite | faded ochre embroidered yarn",
+        "base_color_texture": false,
+        "metallic_roughness_texture": false,
+        "normal_texture": false,
+        "metallic_factor": 0.10000000149011612,
+        "roughness_factor": 0.8100000023841858
+      },
+      {
+        "name": "Elite | scarf matte walnut wool",
+        "base_color_texture": true,
+        "metallic_roughness_texture": false,
+        "normal_texture": true,
+        "metallic_factor": 0,
+        "roughness_factor": 0.9399999976158142
+      },
+      {
+        "name": "Elite.dark_steel",
+        "base_color_texture": true,
+        "metallic_roughness_texture": true,
+        "normal_texture": true,
+        "metallic_factor": 0.8600000143051147,
+        "roughness_factor": 1.0
+      },
+      {
+        "name": "Material_0",
+        "base_color_texture": true,
+        "metallic_roughness_texture": true,
+        "normal_texture": true,
+        "metallic_factor": 1.0,
+        "roughness_factor": 1.0
+      }
+    ],
+    "mesh_count": 923,
+    "animation_count": 0,
+    "skin_count": 0
+  },
+  "reimport": {
+    "mesh_objects": 923,
+    "vertices": 2190065,
+    "polygons": 3721278,
+    "triangles": 3721278,
+    "materials": [
+      "Elite | age-darkened braid and frayed threads",
+      "Elite | faded ochre embroidered yarn",
+      "Elite | scarf matte walnut wool",
+      "Elite | umber acanthus wool tapestry",
+      "Elite.black",
+      "Elite.dark_steel",
+      "Elite.gold",
+      "Elite.leather",
+      "Elite.steel",
+      "Material_0"
+    ],
+    "images": [
+      {
+        "name": "ElitePBR.Black.Color",
+        "size": [
+          512,
+          512
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Brass.Color",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Brass.Roughness",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.DarkSteel.Color",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Leather.Color",
+        "size": [
+          512,
+          512
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Leather.Normal",
+        "size": [
+          512,
+          512
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Leather.Roughness",
+        "size": [
+          512,
+          512
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Steel.Color",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Steel.Normal",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "ElitePBR.Steel.Roughness",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Elite_Scarf_CocoaWool_BaseColor_1K",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Elite_Scarf_WovenNormal_1K",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Elite_Tapestry_BaseColor_1K",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Elite_Tapestry_TangentNormal_1K",
+        "size": [
+          1024,
+          1024
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Image_0",
+        "size": [
+          2048,
+          2048
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Image_1",
+        "size": [
+          2048,
+          2048
+        ],
+        "has_data": true,
+        "packed": true
+      },
+      {
+        "name": "Image_2",
+        "size": [
+          2048,
+          2048
+        ],
+        "has_data": true,
+        "packed": true
+      }
+    ],
+    "missing_uv_objects": [],
+    "missing_material_objects": [],
+    "bounds_m": {
+      "minimum": [
+        -0.619133710861206,
+        -0.27143359184265137,
+        0.0
+      ],
+      "maximum": [
+        0.619133710861206,
+        0.4006708264350891,
+        2.182351589202881
+      ],
+      "dimensions": [
+        1.238267421722412,
+        0.6721044182777405,
+        2.182351589202881
+      ]
+    }
+  },
+  "status": "passed"
+}
