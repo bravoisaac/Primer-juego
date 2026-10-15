@@ -1,0 +1,43 @@
+{
+  "source_original": "C:\\Users\\isaac\\Downloads\\Meshy_AI_Gilded_Sentinel_1012232218_texture.glb",
+  "archived_copy": "C:\\Users\\isaac\\Documents\\Proyectos\\Ten Fe\\Assets\\Characters\\Enemies\\PaladinElite\\DirectMesh\\Source\\Paladin_Meshy_Original_Copy.glb",
+  "source_sha256": "b5c989fcf237ea182162e3967ca5462bbaad413947f7cbc09dfefeaf3d87b421",
+  "original_and_copy_identical": true,
+  "vertices_editable": 104517,
+  "triangles": 180540,
+  "uv_hash_before": "56b74263c035fe6952385fc2d1ffdfaa6ccd866c7086735814615a036d67e4c8",
+  "uv_hash_after": "56b74263c035fe6952385fc2d1ffdfaa6ccd866c7086735814615a036d67e4c8",
+  "topology_hash_before": "3669e3b2165314ffe315ae4d6109a461321dac680629d303604ea53852c3e6fc",
+  "topology_hash_after": "3669e3b2165314ffe315ae4d6109a461321dac680629d303604ea53852c3e6fc",
+  "uv_and_connectivity_preserved": true,
+  "source_images_sha256": {
+    "Image_0": "24f9d27a065c4623c3500b799c83292969364e1fea2a83ac0838833a0bf4a3a3",
+    "Image_2": "0b1e1888199b0442ac6b709055ba7f4c70d443b4caa066f74e08407c8e2ec397",
+    "Image_1": "e25b46ade22189d5dcf508b7c55430810ee72d404708610acb00ac5efdacc472"
+  },
+  "shape_keys": [
+    "01_Peto_y_cintura",
+    "02_Hombros_y_brazales",
+    "03_Volumen_grebas",
+    "04_Ancho_casco"
+  ],
+  "moved_vertices": 72708,
+  "max_displacement_m": 0.023970681780932902,
+  "dimensions_m": [
+    1.6620174646377563,
+    0.42234668135643005,
+    2.0799999237060547
+  ],
+  "export_validation": {
+    "status": "passed",
+    "meshes": 1,
+    "triangles": 180540,
+    "images": 3,
+    "image_bytes_unchanged": true,
+    "round_trip_geometry_matches": true,
+    "external_references": []
+  },
+  "pose": "Original T-pose",
+  "rig": false,
+  "stage": "First direct modification of the source mesh; artistic review and animation preparation pending"
+}

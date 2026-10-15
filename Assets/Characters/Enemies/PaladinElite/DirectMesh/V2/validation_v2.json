@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "source_sha256": "b5c989fcf237ea182162e3967ca5462bbaad413947f7cbc09dfefeaf3d87b421",
+  "input_blend_sha256": "9f86ae97a2fa2585e79f06e021e25bddfc047548397c6d5bd1c7165fb309259c",
+  "original_unchanged": true,
+  "previous_blend_unchanged": true,
+  "original_uv_preserved": true,
+  "original_topology_preserved": true,
+  "original_pbr_bytes_preserved": true,
+  "original_mesh_triangles": 180540,
+  "export_triangles": 705944,
+  "export_meshes": 87,
+  "embedded_images": 16,
+  "dimensions_m": [
+    1.1473681926727295,
+    0.6386128664016724,
+    2.1050000190734863
+  ],
+  "external_references": [],
+  "rig": false,
+  "pose": "Relaxed static pose; original T-pose retained as Basis",
+  "changes": [
+    "Substantial torso/head/greave proportions",
+    "Arms lowered 68 degrees with smooth shoulder transition",
+    "Two domed pauldrons and six overlapping lames",
+    "Brass borders, rivets and cloak clasps",
+    "Long torn cape, gathered cowl and split front cloth"
+  ]
+}
