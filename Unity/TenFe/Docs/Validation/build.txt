@@ -1,0 +1,8 @@
+Unity 6000.3.26f1; Windows x64; Direct3D 11; Development build.
+Validation completed: 2026-11-01.
+13 core checks + 57 runtime checks = 70 passed.
+Three Meshy sentinels: valid generic avatars and skins; seven animation clips each.
+Body: 54,999 triangles; 20 bones; original source preserved by SHA256.
+Executable SHA256: B7CCA8B82003185F22644D0EE1C23B3640DE1B996802D4F5D0501E287011AFA6
+Attribution included in Builds/Windows/THIRD_PARTY_NOTICES.txt.
+Scene previews exclude IMGUI HUD. Manual input and artistic skin refinement remain pending.

@@ -33,3 +33,14 @@ Thumbs.db
 # Local developer settings
 **/Config/DefaultEditorPerProjectUserSettings.ini
 
+# Unity generated data and local builds
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Ll]ogs/
+**/[Uu]serSettings/
+**/[Bb]uilds/
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+*.csproj
+

@@ -1,0 +1,9 @@
+PASS: 3 skeletal enemies.
+Windup: 0,800 seconds
+Idle: 2,000 seconds
+Death: 1,400 seconds
+Strike: 1,167 seconds
+Run: 0,800 seconds
+Walk: 1,200 seconds
+Hit: 0,500 seconds
+Validated: avatar, bones/bindposes, textures, single visual driver.

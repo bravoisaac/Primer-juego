@@ -1,0 +1,76 @@
+PASSED runtime smoke checks
+Unity 6000.3.26f1
+PASS Scene boot and isolated test session
+PASS Player spawn resources
+PASS Ground collision at spawn (position=(0.00, 0.08, -11.00), flags=Below, minimum=0)
+PASS Four enemies and two checkpoints
+PASS Sanctuary loads the authored sky, fog and atmosphere
+PASS Camera grade shader is supported in the Windows player
+PASS Atmosphere has ten flame lights and no new gameplay collisions
+PASS Weathered materials and wind banners have supported shaders
+PASS Fire, embers and ash are active within the particle budget
+PASS Camera renders non-black scene: atmosfera_entrada.png
+PASS Camera renders non-black scene: atmosfera_patio.png
+PASS Camera renders non-black scene: atmosfera_templo.png
+PASS Camera renders non-black scene: santuario.png
+PASS Enemy detects player and announces its strike
+PASS Enemy windup resolves into damage
+PASS Safe rest resets encounters and resources
+PASS Sprint moves character and consumes stamina
+PASS Frontal block spends energy and prevents damage
+PASS Rear attacks bypass the shield
+PASS Healing action resolves and consumes one flask
+PASS Dodge grants invulnerability only during its window
+PASS Damage resumes after the dodge window
+PASS Jump lifts player off the floor
+PASS Player lands after jumping
+PASS Lock-on selects a visible enemy in front
+PASS Light attack damages target exactly once
+PASS Heavy attack resolves after windup with higher damage
+PASS Walls block melee and lock-on
+PASS Enemy death grants faith once
+PASS Dead enemy cannot grant duplicate reward
+PASS Relic is collected once
+PASS Benediction costs faith and increases vitality
+PASS Insufficient faith cannot buy an upgrade
+PASS Shortcut unlock removes the barrier
+PASS Second altar records spawn and revives regular enemies
+PASS Death creates recoverable faith
+PASS Timed respawn uses last altar
+PASS Recovery restores faith and consumes vestige
+PASS Second death replaces the old unrecovered vestige
+PASS Boss switches phase below half health
+PASS Camera renders non-black scene: aster.png
+PASS Boss defeat records victory and reward
+PASS Rest preserves defeated boss
+PASS Pause freezes world and frees cursor
+PASS Resume restores game time
+PASS Meshy sentinel replaces the primitive enemy
+PASS Sentinel skin and generic avatar are bound; AI owns movement
+PASS Sentinel animation present: Idle
+PASS Sentinel animation present: Walk
+PASS Sentinel animation present: Run
+PASS Sentinel animation present: Windup
+PASS Sentinel animation present: Strike
+PASS Sentinel animation present: Hit
+PASS Sentinel animation present: Death
+PASS Sentinel turns and accelerates into skeletal locomotion
+PASS Walking deforms the skinned mesh, not only the root transform
+PASS Camera renders non-black scene: centinela_persiguiendo.png
+PASS AI attack windup drives the animation
+PASS Camera renders non-black scene: centinela_ataque.png
+PASS Animated strike applies a timed hit
+PASS Sentinel plays hit reaction when staggered
+PASS Sentinel death holds final pose and disables collision
+PASS Camera renders non-black scene: centinela_muerto.png
+PASS Sentinel respawn restores the rig from the death pose
+PASS Camera renders non-black scene: centinela_integrado.png
+PASS Enemy observes before approaching instead of instantly running
+PASS Turning and attack preparation never snap toward the player
+PASS Pursuit builds speed gradually and reaches a run
+PASS Enemy changes from running to walking near melee range
+PASS Enemy plants its feet before announcing a strike
+PASS Committed windup and strike keep their heading and planted feet
+PASS Moving behind a committed strike avoids its damage
+PASS Reset clears momentum and starts a quiet patrol pause
+PASS Patrol walks to a nearby point then pauses naturally

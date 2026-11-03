@@ -1,0 +1,19 @@
+TEN FE - RECURSOS DE TERCEROS
+
+Gilded Sentinel / Paladin del Ocaso
+Fuente facilitada por el creador de Ten Fe, generada con Meshy 6 Lite el 2026-10-12.
+Archivo original: Meshy_AI_Gilded_Sentinel_1012232218_texture.glb
+Servicio: https://www.meshy.ai/
+Licencia registrada para esta fuente: Creative Commons Attribution 4.0 International.
+Texto de licencia: https://creativecommons.org/licenses/by/4.0/
+Registro de procedencia: Assets/Characters/Enemies/Paladin/README.md en el repositorio de Ten Fe.
+SHA256 de la fuente: b5c989fcf237ea182162e3967ca5462bbaad413947f7cbc09dfefeaf3d87b421
+
+Cambios para Unity, 2026-11-01: reduccion de malla, normalizacion de escala,
+esqueleto y pesos nuevos, siete animaciones originales, espada provisional,
+conversion de mapas PBR y conexion a la IA de Ten Fe.
+La fuente original permanece conservada. No se atribuye a Meshy autoria de estos cambios.
+
+Resto de geometria de prototipo, codigo de movimiento, poses primitivas y audio
+sintetizado: creados localmente para Ten Fe.
+Unity y sus modulos integrados: sujetos a los terminos del editor Unity.

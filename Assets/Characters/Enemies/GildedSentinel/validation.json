@@ -1,0 +1,39 @@
+{
+  "source_sha256": "b5c989fcf237ea182162e3967ca5462bbaad413947f7cbc09dfefeaf3d87b421",
+  "source_triangles": 180540,
+  "gameplay_triangles": 54999,
+  "vertices": 40697,
+  "bones": 20,
+  "unweighted_vertices": 0,
+  "max_influences": 3,
+  "animations": {
+    "Idle": 60,
+    "Walk": 36,
+    "Run": 24,
+    "Windup": 24,
+    "Strike": 35,
+    "Hit": 15,
+    "Death": 42
+  },
+  "textures": {
+    "BaseColor": [
+      2048,
+      2048
+    ],
+    "ORM": [
+      2048,
+      2048
+    ],
+    "Normal": [
+      2048,
+      2048
+    ]
+  },
+  "height_m": 2,
+  "license": "CC BY 4.0; original rig, animations and sword added locally",
+  "limitations": [
+    "Approximate anatomical weights; not manual production retopology",
+    "No individual finger rig or cloth simulation",
+    "Original authored prototype animation, not motion capture"
+  ]
+}

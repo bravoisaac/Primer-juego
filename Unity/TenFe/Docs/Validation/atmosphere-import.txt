@@ -1,0 +1,2 @@
+PASS: custom sky, world-space materials, six wind banners, ten flame lights, particle effects and camera grade.
+No gameplay colliders added. Existing scene geometry retained.
