@@ -74,3 +74,36 @@ PASS Committed windup and strike keep their heading and planted feet
 PASS Moving behind a committed strike avoids its damage
 PASS Reset clears momentum and starts a quiet patrol pause
 PASS Patrol walks to a nearby point then pauses naturally
+PASS Latest combat intent replaces the previous one and retains its direction
+PASS Buffered input is consumed only once
+PASS Early combat input expires rather than executing much later
+PASS Queued dodge neither cancels an attack nor spends stamina early
+PASS Late dodge begins after recovery, moves in the requested direction and pays once
+PASS Early heavy input does not start a delayed attack after recovery
+PASS Pause discards pending combat input before resuming
+PASS Restoring at an altar clears pending actions
+PASS Rejected action does not fire when stamina becomes available later
+PASS Camera immediately contracts in front of an obstructing wall
+PASS Hit shake keeps the camera sphere outside scenery
+PASS Camera returns gradually when its obstruction disappears
+PASS Camera recovers its original distance after clearing a wall
+PASS Lock-on shifts the framing to reveal the enemy beside the player
+PASS Shoulder framing stays on the player side of a nearby lateral wall
+PASS Camera follow and shake freeze during pause
+PASS Respawn clears shoulder framing and previous camera shake
+PASS Presentation HUD is active
+PASS Rendered HUD ornament present: hud_juego.png
+PASS Rendered HUD ornament present: hud_ayuda.png
+PASS Rendered HUD ornament present: hud_pausa.png
+PASS 4:3 presentation resolution applied
+PASS Rendered HUD ornament present: hud_pausa_4x3.png
+PASS Rendered HUD ornament present: hud_juego_4x3.png
+PASS 1080p presentation resolution applied
+PASS Rendered HUD ornament present: hud_pausa_1080.png
+PASS Altar interaction is available for presentation capture
+PASS Rendered HUD ornament present: hud_altar.png
+PASS Target and attack warning are visible together
+PASS Rendered HUD ornament present: hud_combate.png
+PASS Boss phase two HUD is available for presentation capture
+PASS Rendered HUD ornament present: hud_jefe.png
+PASS Rendered HUD ornament present: hud_muerte.png

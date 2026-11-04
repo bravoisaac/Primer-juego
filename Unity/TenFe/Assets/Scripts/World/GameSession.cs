@@ -64,6 +64,7 @@ namespace TenFe
         }
         public void SetPaused(bool paused)
         {
+            if (paused && Player != null) Player.ClearBufferedInput();
             Paused = paused; Time.timeScale = paused ? 0 : 1;
             Cursor.lockState = paused || TestMode ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = paused || TestMode;

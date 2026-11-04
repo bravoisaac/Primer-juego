@@ -29,6 +29,14 @@ La escena contiene geometría, personajes y referencias editables. `Ten Fe > Cre
 | Comprar vitalidad junto a un altar | V |
 | Ayuda / pausa y opciones | H / Escape |
 
+La interfaz utiliza paneles de bronce y ceniza y mantiene las proporciones en ventanas 4:3 y 16:9. La barra de vida conserva brevemente el daño reciente; los tres indicadores del cáliz muestran sus cargas. Un vestigio pendiente muestra la fe recuperable. Los avisos de ataque priorizan una sola amenaza cercana con línea de visión.
+
+Puedes pulsar la siguiente acción hasta 200 ms antes de terminar la recuperación de la actual. Se conserva solo la última pulsación: no cancela ataques ni acumula una secuencia. La esquiva retiene la dirección elegida al pulsarla. Si al ejecutar faltan energía, suelo o cálices, el intento se descarta. Pausar, morir, reaparecer o recibir un impacto que interrumpe limpia la acción pendiente.
+
+Al fijar un enemigo, la cámara se desplaza ligeramente hacia el hombro para despejar su silueta. Cerca de una pared se acerca de inmediato y recupera su distancia suavemente al salir. La sacudida de impacto también respeta la colisión.
+
+En un altar, el panel muestra el coste de la bendición y sus +25 de vida, o indica que alcanzaste el nivel máximo. H abre los controles agrupados; el mundo continúa activo mientras los consultas. Escape pausa y permite ajustar volumen y sensibilidad con sus valores visibles. Mando, reasignación y tamaño de interfaz configurable siguen pendientes.
+
 ## Recorrido y reglas
 
 1. Avanza desde las estatuas hasta la llama dorada y descansa.
@@ -44,25 +52,25 @@ Guardado: `%USERPROFILE%\AppData\LocalLow\TenFe\Ten Fe - Santuario del Ocaso\pil
 
 ## Arquitectura
 
-- `Assets/Scripts/Character`: entrada, movimiento y cámara con colisión.
+- `Assets/Scripts/Character`: entrada, `PlayerActionBuffer` para retener un único intento, movimiento y cámara con colisión y retorno suave.
 - `Assets/Scripts/Combat`: vida, energía, ángulos y obstrucción de golpes.
 - `Assets/Scripts/AI`: patrulla con pausas, observación, persecución con aceleración y giros graduales, acercamiento lento, frenado, anticipación, ataque, regreso y fases.
 - `Assets/Scripts/World`: escena, interacciones y coordinación del ciclo.
 - `Assets/Scripts/Save`: datos versionados y guardado con reemplazo de archivo.
-- `Assets/Scripts/Presentation`: HUD, opciones, sonido sintético, poses provisionales y `SentinelVisual` para animación esquelética del enemigo.
+- `Assets/Scripts/Presentation`: `GameHud` conecta estado y opciones a la interfaz; `HudTheme` reúne estilos, símbolos y texturas reutilizables. También incluye sonido sintético, poses provisionales y `SentinelVisual` para animación esquelética del enemigo.
 - `SanctuaryAtmosphere` anima la intensidad de las llamas; `SanctuaryImageEffect` añade brillo suave y viñeta, con retorno al renderizado normal si el shader no está disponible.
 - `Assets/Art/GildedSentinel`: modelo del usuario con rig, siete clips de animación, materiales y prefab.
 - `Assets/Art/Atmosphere`: cielo con nubes, piedra y bronce erosionados, fuego/brasas, estandartes al viento y acabado de cámara; recursos originales definidos por shaders y una malla editable.
 - `Assets/Editor`: generación, validación y compilación.
-- `Assets/Scripts/Validation`: comprobaciones dentro del ejecutable con `--smoke-test`.
+- `Assets/Scripts/Validation`: comprobaciones dentro del ejecutable con `--smoke-test`; `ResponsivenessChecks` cubre pulsaciones durante recuperación, pausa, restauración y comportamiento de cámara frente a obstáculos.
 
 Sin paquetes externos, red, cuentas ni servicios dentro del juego. Se utilizan el renderizador integrado y el Input Manager del editor para mantener esta base pequeña. La entrada aún no está abstraída para mando ni reasignación.
 
 ## Verificación reproducible
 
-Con el editor cerrado, ejecuta `Validar.ps1` desde PowerShell. Compila **la escena guardada** y ejecuta las comprobaciones del ciclo de juego en una sesión aislada. No usa ni sobrescribe tu partida. Los informes y vistas de la cámara (sin HUD) quedan en `Docs/Validation`; los logs, en `Logs`.
+Con el editor cerrado, ejecuta `Validar.ps1` desde PowerShell. Compila **la escena guardada** y ejecuta las comprobaciones del ciclo de juego en una sesión aislada. No usa ni sobrescribe tu partida. Los informes y capturas quedan en `Docs/Validation`; los logs, en `Logs`. Durante las capturas de interfaz la ventana de pruebas puede aparecer y cambiar de resolución; se cierra automáticamente al terminar.
 
-Validación del 2026-11-02: **13 comprobaciones de reglas y guardado + 74 de ejecución aprobadas**. Incluye combate, progresión, movimiento gradual, skin del centinela y ocho comprobaciones nuevas de ambientación: carga de cielo/niebla, soporte de shaders, diez luces de fuego, ausencia de nuevas colisiones, partículas activas con presupuesto limitado y tres vistas del santuario. Walk/Run conservan la fase de zancada y ajustan su cadencia a la velocidad. La interfaz IMGUI, los controles físicos, el contacto fino de pies y el equilibrio aún requieren la partida manual de `Docs/PRUEBAS_MANUALES.md`.
+Validación del 2026-11-03: **13 comprobaciones de reglas y guardado + 107 de ejecución aprobadas (120 en total)**. Incluye combate, progresión, movimiento gradual, skin del centinela, ambientación, presentación y 17 comprobaciones nuevas de respuesta de acciones y cámara. Se verifican caducidad y ejecución única de intentos, pausa, gasto de energía, retorno tras obstáculos y colisión al desplazar el encuadre junto a paredes laterales. Se mantienen diez capturas completas de interfaz: juego, ayuda, pausa, altar con bendición máxima, objetivo preparando un golpe, jefe en fase II y muerte. Hay vistas a 1280×720, 1024×768 y 1920×1080. Los archivos `hud_*.png` incluyen IMGUI; las vistas de cámara anteriores lo excluyen. Los clics y teclas físicos, la comodidad del encuadre, el contacto fino de pies y el equilibrio aún requieren la partida manual de `Docs/PRUEBAS_MANUALES.md`.
 
 Vistas de ambientación: `Docs/Validation/atmosfera_entrada.png`, `atmosfera_patio.png` y `atmosfera_templo.png`. Son capturas del ejecutable sin HUD. Los efectos tienen un máximo conjunto de 920 partículas y el brillo se procesa a un cuarto del ancho/alto de la imagen. Esto limita el coste, pero todavía falta medir FPS a 1080p y probar en otro equipo.
 

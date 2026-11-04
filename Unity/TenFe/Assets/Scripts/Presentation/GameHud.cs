@@ -4,116 +4,258 @@ namespace TenFe
 {
     public sealed class GameHud : MonoBehaviour
     {
-        GUIStyle small, normal, title, center, button;
-        readonly Color gold = new Color(.86f, .71f, .42f);
-        Texture2D white;
-        bool help;
-        float volume = .65f;
+        HudTheme theme;
+        internal bool HelpVisible { get; set; }
+        float volume = .65f, healthTrail = 1, trailUntil;
+        float previousHealth = -1;
+        float width, height;
+
         void Start()
         {
-            volume = PlayerPrefs.GetFloat("volume", .65f); AudioListener.volume = volume;
-            GameSession.Instance.Player.orbit.sensitivity = PlayerPrefs.GetFloat("sensitivity", 2.2f);
+            volume = Mathf.Clamp01(PlayerPrefs.GetFloat("volume", .65f));
+            AudioListener.volume = volume;
+            GameSession.Instance.Player.orbit.sensitivity = Mathf.Clamp(PlayerPrefs.GetFloat("sensitivity", 2.2f), .5f, 5);
         }
-        void Styles()
+
+        void Update()
         {
-            if (white != null) return;
-            white = Texture2D.whiteTexture;
-            small = new GUIStyle(GUI.skin.label) { fontSize = 14 }; small.normal.textColor = new Color(.73f, .74f, .74f);
-            normal = new GUIStyle(small) { fontSize = 18 }; normal.normal.textColor = new Color(.94f, .9f, .8f);
-            center = new GUIStyle(normal) { alignment = TextAnchor.MiddleCenter };
-            title = new GUIStyle(center) { fontSize = 40 }; title.normal.textColor = gold;
-            button = new GUIStyle(GUI.skin.button) { fontSize = 18, fixedHeight = 42 };
+            var game = GameSession.Instance;
+            if (game == null || !game.Ready) return;
+            if (Input.GetKeyDown(KeyCode.H) && !game.Paused && !game.Player.Health.IsDead)
+                HelpVisible = !HelpVisible;
+            float current = game.Player.Health.Fraction;
+            if (previousHealth < 0 || current > previousHealth) healthTrail = current;
+            else if (current < previousHealth) trailUntil = Time.unscaledTime + .45f;
+            if (Time.unscaledTime > trailUntil && !game.Paused)
+                healthTrail = Mathf.MoveTowards(healthTrail, current, Time.unscaledDeltaTime * .45f);
+            previousHealth = current;
         }
-        void Rect(float x, float y, float w, float h, Color color)
-        { GUI.color = color; GUI.DrawTexture(new Rect(x, y, w, h), white); GUI.color = Color.white; }
-        void Bar(float x, float y, float w, float fraction, Color color)
-        {
-            Rect(x - 2, y - 2, w + 4, 16, new Color(.35f, .3f, .21f));
-            Rect(x, y, w, 12, new Color(.08f, .09f, .1f)); Rect(x, y, w * Mathf.Clamp01(fraction), 12, color);
-        }
+
+        // A single scale preserves text and symbols at 4:3, 16:9 and ultrawide aspect ratios.
+        internal static float CanvasScale(int screenWidth, int screenHeight)
+            => Mathf.Max(.01f, Mathf.Min(screenWidth / 1280f, screenHeight / 720f));
+
         void OnGUI()
         {
             var game = GameSession.Instance;
             if (game == null || !game.Ready) return;
-            Styles();
-            GUI.matrix = Matrix4x4.Scale(new Vector3(Screen.width / 1280f, Screen.height / 720f, 1));
-            var player = game.Player;
-            Rect(24, 23, 332, 119, new Color(.035f, .045f, .055f, .85f));
-            GUI.Label(new Rect(40, 31, 300, 25), "EL ÚLTIMO PEREGRINO", normal);
-            Bar(40, 69, 296, player.Health.Fraction, new Color(.62f, .19f, .18f));
-            Bar(40, 94, 296, player.Energy.Fraction, new Color(.32f, .53f, .43f));
-            GUI.Label(new Rect(40, 113, 300, 23), "VIDA " + Mathf.CeilToInt(player.Health.Current) + " / " + player.Health.maximum + "    ·    ENERGÍA " + Mathf.CeilToInt(player.Energy.Current), small);
-            GUI.Label(new Rect(950, 28, 300, 26), "✦  " + game.Progress.faith + "  FRAGMENTOS DE FE", normal);
-            GUI.Label(new Rect(950, 55, 300, 24), "Bendición " + game.Progress.level + " / 5", small);
-            Rect(24, 607, 310, 87, new Color(.035f, .045f, .055f, .85f));
-            GUI.Label(new Rect(40, 615, 290, 28), "R   CÁLIZ DE LA LLAMA   " + player.Flasks + " / 3", normal);
-            GUI.Label(new Rect(40, 649, 290, 25), "H  Controles    ·    ESC  Pausa", small);
-            GUI.Label(new Rect(815, 650, 430, 30), game.Progress.boss ? "JURAMENTO CUMPLIDO · Explora el santuario" : "Busca a Aster en el templo del eclipse", small);
+            if (theme == null) theme = new HudTheme();
+            Matrix4x4 oldMatrix = GUI.matrix;
+            Color oldColor = GUI.color;
+            float scale = CanvasScale(Screen.width, Screen.height);
+            width = Screen.width / scale; height = Screen.height / scale;
+            GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1));
+            GUI.color = Color.white;
+            try
+            {
+                if (game.Paused) { Pause(game); return; }
+                Resources(game);
+                Encounters(game);
+                if (!string.IsNullOrEmpty(game.Message))
+                {
+                    var notice = new Rect(width / 2 - 230, 28, 460, 84);
+                    theme.Panel(notice);
+                    theme.Box(new Rect(notice.x, notice.y, 3, notice.height), HudTheme.Gold);
+                    theme.Text(new Rect(notice.x + 18, notice.y + 8, notice.width - 36, 68), game.Message, theme.Center);
+                }
+                if (game.Nearby != null && !game.Player.Health.IsDead) Interaction(game);
+                if (game.Player.Health.IsDead) Death(game);
+                else if (HelpVisible) Help();
+            }
+            finally { GUI.matrix = oldMatrix; GUI.color = oldColor; }
+        }
 
+        void Resources(GameSession game)
+        {
+            var player = game.Player;
+            theme.Panel(new Rect(28, 28, 350, 134));
+            theme.Eclipse(new Rect(44, 43, 42, 42));
+            theme.Text(new Rect(98, 40, 260, 22), "EL ÚLTIMO PEREGRINO", theme.Heading);
+            theme.Text(new Rect(98, 65, 250, 20), "BENDICIÓN  " + game.Progress.level + " / 5", theme.Small);
+            theme.Bar(new Rect(44, 98, 318, 13), player.Health.Fraction, HudTheme.Health, healthTrail);
+            theme.Bar(new Rect(44, 123, 318, 7), player.Energy.Fraction, HudTheme.Energy);
+            theme.Text(new Rect(44, 136, 170, 20), "VIDA  " + Mathf.CeilToInt(player.Health.Current) + " / " + player.Health.maximum, theme.Small);
+            theme.Text(new Rect(216, 136, 146, 20), "ENERGÍA  " + Mathf.CeilToInt(player.Energy.Current), theme.SmallRight);
+
+            theme.Panel(new Rect(width - 264, 28, 236, 84));
+            theme.Diamond(width - 239, 55, 5, HudTheme.Gold);
+            theme.Text(new Rect(width - 223, 40, 180, 21), "FRAGMENTOS DE FE", theme.Small);
+            theme.Text(new Rect(width - 242, 61, 196, 39), game.Progress.faith.ToString("N0"), theme.Number);
+            if (game.Progress.droppedFaith > 0)
+                theme.Text(new Rect(width - 344, 120, 316, 26), "Vestigio pendiente · " + game.Progress.droppedFaith + " fe", theme.Right);
+
+            float bottom = height - 116;
+            theme.Panel(new Rect(28, bottom, 274, 88));
+            theme.Key(new Rect(44, bottom + 18, 32, 32), "R");
+            theme.Text(new Rect(88, bottom + 13, 198, 24), "CÁLIZ DE LA LLAMA", theme.Heading);
+            for (int i = 0; i < 3; i++)
+            {
+                var pip = new Rect(89 + i * 24, bottom + 46, 16, 19);
+                theme.Outline(pip, HudTheme.Border);
+                if (i < player.Flasks) theme.Box(new Rect(pip.x + 3, pip.y + 3, 10, 13), HudTheme.Gold);
+            }
+            theme.Text(new Rect(167, bottom + 42, 115, 25), player.Flasks > 0 ? player.Flasks + " / 3" : "AGOTADOS", theme.Small);
+            theme.Text(new Rect(28, height - 24, 340, 22), "H  Controles     /     ESC  Pausa", theme.Small);
+
+            theme.Panel(new Rect(width - 342, height - 106, 314, 78));
+            theme.Text(new Rect(width - 326, height - 97, 280, 21), game.Progress.boss ? "JURAMENTO CUMPLIDO" : "EL JURAMENTO", theme.SmallGold);
+            theme.Text(new Rect(width - 326, height - 74, 280, 40), game.Progress.boss
+                ? "La chispa del Ocaso vuelve a arder."
+                : "Busca a Aster en el templo del eclipse.", theme.Body);
+        }
+
+        void Encounters(GameSession game)
+        {
+            var player = game.Player;
             var camera = player.orbit.GetComponent<Camera>();
+            EnemyBrain warning = null;
+            float nearest = 8;
             foreach (var enemy in game.Enemies)
             {
                 if (!enemy.gameObject.activeInHierarchy || enemy.Health.IsDead) continue;
+                float distance = Vector3.Distance(player.transform.position, enemy.transform.position);
                 if (enemy.boss && enemy.Engaged)
                 {
-                    GUI.Label(new Rect(340, 566, 600, 30), enemy.title + (enemy.Enraged ? " · FURIA DIVINA" : ""), center);
-                    Bar(340, 602, 600, enemy.Health.Fraction, new Color(.64f, .23f, .17f));
+                    float x = width / 2 - 300, y = height - 175;
+                    theme.Panel(new Rect(x - 20, y - 8, 640, 72));
+                    theme.Text(new Rect(x, y, 600, 28), enemy.title, theme.Center);
+                    theme.Bar(new Rect(x, y + 36, 600, 10), enemy.Health.Fraction, HudTheme.Health);
+                    if (enemy.Enraged)
+                        theme.Text(new Rect(x, y - 35, 600, 25), "FASE II  /  FURIA DIVINA", theme.CenterGold);
                 }
-                else if (!enemy.boss && Vector3.Distance(player.transform.position, enemy.transform.position) < 13)
+                else if (!enemy.boss && distance < 13)
                 {
                     Vector3 screen = camera.WorldToViewportPoint(enemy.transform.position + Vector3.up * (enemy.elite ? 3 : 2.6f));
-                    if (screen.z > 0) Bar(screen.x * 1280 - 36, (1 - screen.y) * 720, 72, enemy.Health.Fraction, new Color(.67f, .29f, .2f));
+                    if (Visible(screen))
+                    {
+                        float x = screen.x * width, y = (1 - screen.y) * height;
+                        theme.Bar(new Rect(x - 42, y, 84, 5), enemy.Health.Fraction, HudTheme.Health);
+                        if (enemy == player.Target)
+                            theme.Text(new Rect(x - 150, y - 29, 300, 24), enemy.title, theme.Center);
+                    }
                 }
                 if (enemy == player.Target)
                 {
                     Vector3 screen = camera.WorldToViewportPoint(enemy.transform.position + Vector3.up * 1.3f);
-                    if (screen.z > 0) GUI.Label(new Rect(screen.x * 1280 - 20, (1 - screen.y) * 720 - 20, 40, 40), "◇", title);
+                    if (Visible(screen)) theme.Target(screen.x * width, (1 - screen.y) * height);
                 }
-                if (enemy.Telegraphing && Vector3.Distance(player.transform.position, enemy.transform.position) < 8)
-                    GUI.Label(new Rect(430, 115, 420, 30), "¡" + enemy.title + " prepara un golpe!", center);
+                // Show the nearest committed threat once, instead of overlapping several labels.
+                if (enemy.Telegraphing && distance < nearest &&
+                    CombatQuery.Clear(player.transform.position + Vector3.up, enemy.transform.position + Vector3.up))
+                { warning = enemy; nearest = distance; }
             }
-            if (!string.IsNullOrEmpty(game.Message))
+            if (warning != null && !player.Health.IsDead)
             {
-                Rect(220, 160, 840, 48, new Color(.03f, .035f, .045f, .8f));
-                GUI.Label(new Rect(230, 163, 820, 42), game.Message, center);
+                theme.Panel(new Rect(width / 2 - 230, 124, 460, 48));
+                theme.Box(new Rect(width / 2 - 230, 124, 3, 48), HudTheme.Gold);
+                theme.Text(new Rect(width / 2 - 214, 126, 428, 44), warning.title + " prepara un golpe", theme.CenterGold);
             }
-            if (game.Nearby != null && !player.Health.IsDead)
-            {
-                Rect(340, 486, 600, 45, new Color(.03f, .035f, .045f, .88f));
-                GUI.Label(new Rect(345, 486, 590, 45), game.Nearby.Prompt, center);
-            }
-            if (player.Health.IsDead)
-            {
-                Rect(0, 0, 1280, 720, new Color(.02f, .01f, .015f, .7f));
-                GUI.Label(new Rect(0, 280, 1280, 90), "TU FE SE APAGA", title);
-                GUI.Label(new Rect(0, 370, 1280, 40), "La llama te llamará de nuevo", center);
-            }
-            if (help && !game.Paused) Controls(360, 230);
-            if (game.Paused) Pause(game);
         }
-        void Update() { if (Input.GetKeyDown(KeyCode.H)) help = !help; }
-        void Controls(float x, float y)
+
+        static bool Visible(Vector3 viewport) => viewport.z > 0 && viewport.x > .04f && viewport.x < .96f && viewport.y > .06f && viewport.y < .94f;
+
+        void Interaction(GameSession game)
         {
-            Rect(x, y, 560, 240, new Color(.025f, .035f, .045f, .96f));
-            string[] lines = { "WASD  Moverse     ·     Mouse  Cámara", "Shift  Correr     ·     F  Saltar     ·     Espacio  Esquivar", "Clic izquierdo  Ataque     ·     Q  Ataque fuerte", "Clic derecho  Bloquear     ·     Tab / clic central  Fijar o cambiar", "R  Curarse     ·     E  Interactuar     ·     V  Mejorar en altar", "Los golpes consumen energía. Ataca después de esquivar." };
-            for (int i = 0; i < lines.Length; i++) GUI.Label(new Rect(x + 20, y + 18 + i * 34, 530, 30), lines[i], i == 5 ? small : normal);
+            var nearby = game.Nearby;
+            float x = width / 2 - 280, y = height - 274;
+            theme.Panel(new Rect(x, y, 560, 78));
+            theme.Key(new Rect(x + 18, y + 23, 32, 32), "E");
+            bool altar = nearby.kind == InteractionKind.Altar;
+            string name = string.IsNullOrWhiteSpace(nearby.title) ? nearby.gameObject.name : nearby.title;
+            theme.Text(new Rect(x + 66, y + 12, 474, 25), altar ? "Descansar en " + name : name, theme.Body);
+            string detail = altar
+                ? (game.Progress.level >= 5 ? "Bendición máxima alcanzada" : "V  Bendición · " + game.UpgradeCost + " fe  /  +25 de vida")
+                : nearby.kind == InteractionKind.Vestige ? "Recuperar " + game.Progress.droppedFaith + " fragmentos de fe" : "Interactuar";
+            theme.Text(new Rect(x + 66, y + 42, 474, 24), detail, theme.SmallGold);
         }
+
+        void Death(GameSession game)
+        {
+            theme.Box(new Rect(0, 0, width, height), new Color(.025f, .012f, .016f, .86f));
+            float y = height / 2;
+            theme.Rule(width / 2 - 240, y - 66, 480);
+            theme.Text(new Rect(0, y - 45, width, 70), "TU FE SE APAGA", theme.Title);
+            theme.Text(new Rect(0, y + 30, width, 35), game.Progress.droppedFaith > 0
+                ? game.Progress.droppedFaith + " fragmentos esperan en tu vestigio"
+                : "La llama te llamará de nuevo", theme.Center);
+            theme.Rule(width / 2 - 240, y + 92, 480);
+        }
+
+        void Help()
+        {
+            float x = width / 2 - 450, y = height / 2 - 200;
+            theme.Panel(new Rect(x, y, 900, 400), true);
+            theme.Text(new Rect(x + 28, y + 20, 844, 35), "EL ARTE DE PERSISTIR", theme.Section);
+            theme.Text(new Rect(x + 28, y + 59, 844, 26), "Administra tu energía. Observa el golpe y aprovecha la recuperación.", theme.Body);
+            theme.Rule(x + 28, y + 104, 844);
+            Controls(x + 28, y + 126, 398, false);
+            Controls(x + 474, y + 126, 398, true);
+            theme.Text(new Rect(x + 28, y + 352, 844, 25), "H  Cerrar ayuda     ·     El mundo sigue activo; usa ESC para pausar.", theme.SmallGold);
+        }
+
+        void Controls(float x, float y, float w, bool combat)
+        {
+            theme.Text(new Rect(x, y, w, 24), combat ? "COMBATE" : "EXPLORACIÓN", theme.SmallGold);
+            string[] keys = combat ? CombatKeys : ExploreKeys;
+            string[] labels = combat ? CombatLabels : ExploreLabels;
+            for (int i = 0; i < keys.Length; i++)
+            {
+                float row = y + 33 + i * 35;
+                theme.Key(new Rect(x, row, 114, 27), keys[i]);
+                theme.Text(new Rect(x + 130, row, w - 130, 28), labels[i], theme.Body);
+            }
+        }
+
+        static readonly string[] ExploreKeys = { "W A S D", "MOUSE", "SHIFT / F", "E / V", "R" };
+        static readonly string[] ExploreLabels = { "Moverse", "Girar la cámara", "Correr / saltar", "Interactuar / bendición", "Beber un cáliz" };
+        static readonly string[] CombatKeys = { "CLIC IZQ.", "Q", "CLIC DER.", "ESPACIO", "TAB / CENTRAL" };
+        static readonly string[] CombatLabels = { "Ataque ligero", "Ataque fuerte", "Mantener el bloqueo", "Esquivar", "Fijar / cambiar objetivo" };
+
         void Pause(GameSession game)
         {
-            Rect(0, 0, 1280, 720, new Color(.015f, .025f, .035f, .93f));
-            GUI.Label(new Rect(0, 35, 1280, 65), "T E N   F E", title);
-            GUI.Label(new Rect(0, 95, 1280, 36), "SANTUARIO DEL OCASO · PAUSA", center);
-            Controls(360, 145);
-            GUI.Label(new Rect(400, 398, 200, 25), "Volumen", normal);
-            float nextVolume = GUI.HorizontalSlider(new Rect(620, 411, 240, 20), volume, 0, 1);
-            if (!Mathf.Approximately(nextVolume, volume)) { volume = nextVolume; AudioListener.volume = volume; PlayerPrefs.SetFloat("volume", volume); }
-            GUI.Label(new Rect(400, 438, 200, 25), "Sensibilidad", normal);
-            float sensitivity = GUI.HorizontalSlider(new Rect(620, 451, 240, 20), game.Player.orbit.sensitivity, .5f, 5);
+            theme.Box(new Rect(0, 0, width, height), new Color(.012f, .018f, .025f, .95f));
+            float x = width / 2 - 500, y = height / 2 - 316;
+            theme.Eclipse(new Rect(x + 4, y + 9, 62, 62));
+            theme.Text(new Rect(x + 86, y, 650, 61), "T E N   F E", theme.Logo);
+            theme.Text(new Rect(x + 90, y + 61, 650, 26), "SANTUARIO DEL OCASO  /  JURAMENTO EN PAUSA", theme.SmallGold);
+            theme.Rule(x, y + 106, 1000);
+
+            theme.Text(new Rect(x, y + 126, 470, 30), "Continúa tu peregrinaje", theme.Section);
+            theme.Text(new Rect(x, y + 163, 455, 49), "Cada llama es un refugio. Descansa para recuperar vida, energía y cálices.", theme.Body);
+            theme.Panel(new Rect(x, y + 230, 452, 168));
+            theme.Text(new Rect(x + 18, y + 241, 416, 25), "AJUSTES", theme.SmallGold);
+            theme.Text(new Rect(x + 18, y + 280, 180, 25), "Volumen", theme.Body);
+            theme.Text(new Rect(x + 360, y + 280, 74, 25), Mathf.RoundToInt(volume * 100) + "%", theme.SmallRight);
+            theme.Box(new Rect(x + 192, y + 295, 151, 3), HudTheme.Border);
+            theme.Box(new Rect(x + 192, y + 295, 151 * volume, 3), HudTheme.Gold);
+            GUI.SetNextControlName("Volume");
+            float nextVolume = GUI.HorizontalSlider(new Rect(x + 192, y + 288, 151, 22), volume, 0, 1, theme.Slider, theme.Thumb);
+            if (!Mathf.Approximately(nextVolume, volume))
+            { volume = nextVolume; AudioListener.volume = volume; if (!game.TestMode) PlayerPrefs.SetFloat("volume", volume); }
+            theme.Text(new Rect(x + 18, y + 337, 170, 25), "Sensibilidad", theme.Body);
+            theme.Text(new Rect(x + 360, y + 337, 74, 25), game.Player.orbit.sensitivity.ToString("0.0"), theme.SmallRight);
+            theme.Box(new Rect(x + 192, y + 352, 151, 3), HudTheme.Border);
+            theme.Box(new Rect(x + 192, y + 352, 151 * Mathf.InverseLerp(.5f, 5, game.Player.orbit.sensitivity), 3), HudTheme.Gold);
+            GUI.SetNextControlName("Sensitivity");
+            float sensitivity = GUI.HorizontalSlider(new Rect(x + 192, y + 345, 151, 22), game.Player.orbit.sensitivity, .5f, 5, theme.Slider, theme.Thumb);
             if (!Mathf.Approximately(sensitivity, game.Player.orbit.sensitivity))
-            { game.Player.orbit.sensitivity = sensitivity; PlayerPrefs.SetFloat("sensitivity", sensitivity); }
-            if (GUI.Button(new Rect(440, 490, 400, 42), "Continuar el juramento", button)) game.SetPaused(false);
-            if (GUI.Button(new Rect(440, 545, 400, 42), "Guardar y salir", button)) { game.Save(); PlayerPrefs.Save(); Application.Quit(); }
-            GUI.Label(new Rect(0, 621, 1280, 40), "Base jugable · Modelos y animaciones provisionales", center);
+            { game.Player.orbit.sensitivity = sensitivity; if (!game.TestMode) PlayerPrefs.SetFloat("sensitivity", sensitivity); }
+
+            GUI.SetNextControlName("Resume");
+            if (GUI.Button(new Rect(x, y + 426, 452, 52), "Continuar el juramento", theme.PrimaryButton))
+            { if (!game.TestMode) PlayerPrefs.Save(); game.SetPaused(false); }
+            GUI.SetNextControlName("Quit");
+            if (GUI.Button(new Rect(x, y + 492, 452, 46), "Guardar y salir", theme.Button))
+            { game.Save(); if (!game.TestMode) PlayerPrefs.Save(); Application.Quit(); }
+            theme.Text(new Rect(x, y + 554, 452, 28), "ESC  Volver al santuario", theme.Small);
+
+            theme.Box(new Rect(x + 493, y + 132, 1, 423), HudTheme.Border);
+            Controls(x + 534, y + 128, 466, false);
+            Controls(x + 534, y + 357, 466, true);
+            theme.Rule(x, y + 603, 1000);
+            theme.Text(new Rect(x, y + 614, 1000, 26), "La fe que conservas: " + game.Progress.faith + "     /     Bendición " + game.Progress.level + " de 5", theme.SmallGold);
         }
+
+        void OnDestroy() { theme?.Dispose(); }
     }
 }

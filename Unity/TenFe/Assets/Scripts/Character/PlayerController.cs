@@ -22,11 +22,13 @@ namespace TenFe
         float vertical, elapsed, duration;
         bool actionApplied;
         internal PlayerInputFrame? TestInput;
+        readonly PlayerActionBuffer inputBuffer = new PlayerActionBuffer();
 
         void Awake()
         {
             controller = GetComponent<CharacterController>();
             Health = GetComponent<Health>(); Energy = GetComponent<Stamina>();
+            Health.Died += ClearBufferedInput;
         }
 
         void Update()
@@ -42,20 +44,21 @@ namespace TenFe
             Vector3 forward = Vector3.ProjectOnPlane(orbit.transform.forward, Vector3.up).normalized;
             Vector3 right = Vector3.Cross(Vector3.up, forward);
             Vector3 direction = forward * input.y + right * input.x;
+            inputBuffer.Record(frame, direction.sqrMagnitude > .01f ? direction : transform.forward, Time.time);
             Blocking = action == ActionState.Free && frame.Block && Energy.Current > 1;
 
-            if (action == ActionState.Free)
+            if (action == ActionState.Free && inputBuffer.Take(Time.time, out var intent, out var intentDirection))
             {
-                if (frame.Dodge && controller.isGrounded && Energy.Spend(24))
+                if (intent == BufferedAction.Dodge && controller.isGrounded && Energy.Spend(24))
                 {
                     Begin(ActionState.Dodge, .56f);
-                    dodgeDirection = direction.sqrMagnitude > .01f ? direction : transform.forward;
+                    dodgeDirection = intentDirection.normalized;
                     Blocking = false;
                 }
-                else if (frame.Light && Energy.Spend(22)) Begin(ActionState.Light, .64f);
-                else if (frame.Heavy && Energy.Spend(36)) Begin(ActionState.Heavy, 1.08f);
-                else if (frame.Heal && Flasks > 0 && Health.Current < Health.maximum) Begin(ActionState.Heal, 1.05f);
-                else if (frame.Jump && controller.isGrounded && Energy.Spend(12)) vertical = 6.5f;
+                else if (intent == BufferedAction.Light && Energy.Spend(22)) Begin(ActionState.Light, .64f);
+                else if (intent == BufferedAction.Heavy && Energy.Spend(36)) Begin(ActionState.Heavy, 1.08f);
+                else if (intent == BufferedAction.Heal && Flasks > 0 && Health.Current < Health.maximum) Begin(ActionState.Heal, 1.05f);
+                else if (intent == BufferedAction.Jump && controller.isGrounded && Energy.Spend(12)) vertical = 6.5f;
             }
 
             if (action != ActionState.Free)
@@ -91,6 +94,8 @@ namespace TenFe
         void Begin(ActionState state, float time)
         { action = state; duration = time; elapsed = 0; actionApplied = false; Blocking = false; }
 
+        public void ClearBufferedInput() => inputBuffer.Clear();
+
         void Strike(bool heavy)
         {
             GameAudio.Play(Cue.Swing);
@@ -106,10 +111,10 @@ namespace TenFe
             if (Blocking && Vector3.Angle(transform.forward, incoming) < 70)
             {
                 if (Energy.Spend(damage * 1.15f)) { GameAudio.Play(Cue.Block); return; }
-                Begin(ActionState.Stagger, .85f);
+                ClearBufferedInput(); Begin(ActionState.Stagger, .85f);
                 GameSession.Instance.Notify("Guardia rota", 1.5f);
             }
-            else Begin(ActionState.Stagger, .32f);
+            else { ClearBufferedInput(); Begin(ActionState.Stagger, .32f); }
             Health.Damage(damage);
             GameAudio.Play(Cue.Hit);
             orbit.Shake(.13f);
@@ -136,8 +141,11 @@ namespace TenFe
         {
             controller.enabled = false; transform.position = position; transform.rotation = Quaternion.identity;
             controller.enabled = true; vertical = 0; action = ActionState.Free; Blocking = false; Target = null;
+            ClearBufferedInput();
             Health.Restore(); Energy.Restore(); Flasks = 3;
             if (orbit != null) orbit.ResetView();
         }
+
+        void OnDestroy() { if (Health != null) Health.Died -= ClearBufferedInput; }
     }
 }

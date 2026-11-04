@@ -174,7 +174,96 @@ namespace TenFe
             Check(Time.timeScale == 1, "Resume restores game time");
             yield return ValidateSentinel(game);
             yield return ValidateNaturalMovement(game);
+            yield return ResponsivenessChecks.Run(game, Check);
+            yield return ValidateHud(game);
             Finish();
+        }
+        IEnumerator ValidateHud(GameSession game)
+        {
+            var hud = FindFirstObjectByType<GameHud>();
+            Check(hud != null && hud.enabled, "Presentation HUD is active");
+            if (hud == null) yield break;
+            // Recreate the initially hidden swapchain before reading its rendered backbuffer.
+            // Changing only GUI state does not make a hidden initial window draw a frame.
+            Screen.SetResolution(1024, 768, FullScreenMode.Windowed);
+            yield return new WaitForSecondsRealtime(.5f);
+            Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            yield return new WaitForSecondsRealtime(.5f);
+            foreach (var enemy in game.Enemies) enemy.enabled = false;
+            game.Player.RestoreAt(game.altars[0].respawnPoint.position);
+            game.Notify("SANTUARIO DEL OCASO · La fe aún arde", 30);
+            yield return new WaitForSecondsRealtime(.2f);
+            yield return CaptureHud("hud_juego.png");
+            hud.HelpVisible = true;
+            yield return CaptureHud("hud_ayuda.png");
+            hud.HelpVisible = false;
+            game.SetPaused(true);
+            yield return CaptureHud("hud_pausa.png");
+            Screen.SetResolution(1024, 768, FullScreenMode.Windowed);
+            yield return new WaitForSecondsRealtime(.5f);
+            Check(Screen.width == 1024 && Screen.height == 768, "4:3 presentation resolution applied");
+            yield return CaptureHud("hud_pausa_4x3.png");
+            game.SetPaused(false);
+            yield return CaptureHud("hud_juego_4x3.png");
+            Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+            yield return new WaitForSecondsRealtime(.5f);
+            Check(Screen.width == 1920 && Screen.height == 1080, "1080p presentation resolution applied");
+            game.SetPaused(true);
+            yield return CaptureHud("hud_pausa_1080.png");
+            Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            yield return new WaitForSecondsRealtime(.5f);
+            game.SetPaused(false);
+            game.Player.RestoreAt(game.altars[0].transform.position - Vector3.forward * 2);
+            game.Progress.level = 5;
+            game.Player.Health.maximum = 225;
+            game.Player.Health.Restore();
+            game.Notify("Bendición de la llama · Vitalidad aumentada", 5);
+            yield return null;
+            Check(game.Nearby == game.altars[0], "Altar interaction is available for presentation capture");
+            yield return CaptureHud("hud_altar.png");
+            var guard = game.Enemies[0];
+            guard.ResetEnemy();
+            game.Player.RestoreAt(guard.Home - Vector3.forward * 2);
+            game.Player.CycleTarget();
+            guard.enabled = true;
+            float deadline = Time.time + 4;
+            while (!guard.Telegraphing && Time.time < deadline) yield return null;
+            Check(game.Player.Target == guard && guard.Telegraphing, "Target and attack warning are visible together");
+            yield return CaptureHud("hud_combate.png");
+            guard.enabled = false;
+            var boss = game.Enemies.Find(e => e.boss);
+            game.Progress.boss = false;
+            boss.gameObject.SetActive(true); boss.ResetEnemy(); boss.enabled = true;
+            game.Player.RestoreAt(boss.Home - Vector3.forward * 2);
+            boss.ReceiveHit(300, false);
+            deadline = Time.time + 4;
+            while (!boss.Telegraphing && Time.time < deadline) yield return null;
+            Check(boss.Engaged && boss.Enraged, "Boss phase two HUD is available for presentation capture");
+            game.Notify("", 0);
+            yield return CaptureHud("hud_jefe.png");
+            boss.enabled = false;
+            game.Player.Health.Damage(1000);
+            yield return CaptureHud("hud_muerte.png", true);
+        }
+        IEnumerator CaptureHud(string file, bool death = false)
+        {
+            // Read the rendered backbuffer after IMGUI, including pause while timeScale is zero.
+            yield return new WaitForEndOfFrame();
+            var pixels = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            try
+            {
+                pixels.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0); pixels.Apply();
+                File.WriteAllBytes(Path.Combine(output, file), pixels.EncodeToPNG());
+                // The top gold panel edge (game) or center ornament (pause) distinguishes UI from a scene-only image.
+                float scale = GameHud.CanvasScale(Screen.width, Screen.height);
+                bool paused = GameSession.Instance.Paused;
+                int x = paused || death ? Screen.width / 2 : Mathf.RoundToInt(44 * scale);
+                int y = death ? Mathf.RoundToInt(Screen.height / 2f + 66 * scale) : paused
+                    ? Mathf.RoundToInt(Screen.height / 2f + 210 * scale) : Screen.height - Mathf.RoundToInt(28 * scale) - 1;
+                Color mark = pixels.GetPixel(x, y);
+                Check(mark.r > .08f && mark.r > mark.b * 1.1f, "Rendered HUD ornament present: " + file);
+            }
+            finally { Destroy(pixels); }
         }
         IEnumerator ValidateSentinel(GameSession game)
         {
