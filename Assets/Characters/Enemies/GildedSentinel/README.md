@@ -14,7 +14,6 @@ La fuente tiene 180.540 triángulos, tres texturas de 2048 px, una malla y ning�
 - `Tools/Blender/rig_gilded_sentinel.py`, desde la raíz del repositorio: preparación reproducible.
 - `Unity/TenFe/Assets/Art/GildedSentinel`: FBX, texturas, material, Animator y prefab utilizados por el juego.
 
-La copia de juego mide 2 metros, contiene 54.999 triángulos en el cuerpo, 20 huesos y hasta tres influencias por vértice. No hay vértices sin peso. Se conservan UV y texturas durante la reducción; no se trata de una retopología manual.
 
 Animaciones originales de esta adaptación: Idle, Walk, Run, Windup, Strike, Hit y Death. Se exportan dentro del FBX como clips independientes. El movimiento del actor lo controla `EnemyBrain`; Animator solo deforma la presentación. El golpe se aplica al 14 % de Strike, después de la anticipación. Los enemigos comunes y el paladín resistente usan este modelo; Aster conserva su silueta provisional.
 
