@@ -9,4 +9,5 @@ $playerPath = Join-Path $PSScriptRoot 'Builds\Windows\TenFe.exe'
 $smokeProcess = Start-Process -FilePath $playerPath -WorkingDirectory $PSScriptRoot -ArgumentList '--smoke-test -screen-width 1280 -screen-height 720 -logFile Logs/runtime.log' -WindowStyle Hidden -Wait -PassThru
 if ($smokeProcess.ExitCode -ne 0) { throw 'La validación falló. Revisa Docs/Validation/runtime.txt y Logs/runtime.log.' }
 Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Docs\Validation\core.txt')
+Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Docs\Validation\animation-clips.txt')
 Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Docs\Validation\runtime.txt')

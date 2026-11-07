@@ -77,6 +77,7 @@ namespace TenFe.Editor
         public static void ValidateExistingAndBuild()
         {
             if (!File.Exists(ScenePath)) throw new Exception("Missing scene: " + ScenePath);
+            SentinelAnimationTools.Validate();
             ValidateCore();
             BuildWindows();
         }

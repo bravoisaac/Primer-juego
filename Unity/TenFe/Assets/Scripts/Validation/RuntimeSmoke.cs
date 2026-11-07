@@ -176,6 +176,7 @@ namespace TenFe
             yield return ValidateSentinel(game);
             yield return ValidateNaturalMovement(game);
             yield return ResponsivenessChecks.Run(game, Check);
+            yield return EnemyAnimationChecks.Run(game, Check, CaptureEnemy);
             yield return ValidateHud(game);
             Finish();
         }
@@ -372,8 +373,9 @@ namespace TenFe
             var camera = obj.AddComponent<Camera>(); camera.enabled = false;
             camera.fieldOfView = 40; camera.nearClipPlane = .1f; camera.farClipPlane = 140;
             ConfigureAtmosphereCamera(camera);
-            Vector3 focus = enemy.transform.position + Vector3.up * 1.05f;
-            camera.transform.position = enemy.transform.position + enemy.transform.forward * 3.4f - enemy.transform.right * 2.8f + Vector3.up * 2.2f;
+            float scale = enemy.transform.lossyScale.x;
+            Vector3 focus = enemy.transform.position + Vector3.up * (1.05f * scale);
+            camera.transform.position = enemy.transform.position + (enemy.transform.forward * 3.4f - enemy.transform.right * 2.8f + Vector3.up * 2.2f) * scale;
             if (Physics.Linecast(focus, camera.transform.position, out RaycastHit obstacle, 1 << 0, QueryTriggerInteraction.Ignore))
                 camera.transform.position = obstacle.point + (focus - obstacle.point).normalized * .3f;
             camera.transform.LookAt(focus);

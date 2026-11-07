@@ -101,6 +101,19 @@ PASS Lock-on shifts the framing to reveal the enemy beside the player
 PASS Shoulder framing stays on the player side of a nearby lateral wall
 PASS Camera follow and shake freeze during pause
 PASS Respawn clears shoulder framing and previous camera shake
+PASS A light non-staggering hit preserves skeletal locomotion
+PASS A repeated stagger restarts the recoil instead of holding its old ending
+PASS Pause freezes the skeletal hit pose
+PASS Rest/reset clears live recoil and returns to the ready pose without requiring death
+PASS Camera renders non-black scene: animacion_preparacion.png
+PASS Rendered strike progress agrees with the AI contact frame and applies damage once
+PASS Sword hand travels from anticipation through the contact arc
+PASS Camera renders non-black scene: animacion_contacto.png
+PASS Strike follows through and recovers without applying a second hit (phase=0,82, hand travel=0,186, health=107)
+PASS Camera renders non-black scene: animacion_recuperacion.png
+PASS Aster visibly raises his weapon throughout anticipation
+PASS Aster swings through contact instead of holding a fixed attack pose
+PASS Camera renders non-black scene: animacion_aster.png
 PASS Presentation HUD is active
 PASS Rendered HUD ornament present: hud_juego.png
 PASS Rendered HUD ornament present: hud_ayuda.png

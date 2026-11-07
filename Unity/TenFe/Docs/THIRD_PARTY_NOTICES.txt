@@ -12,6 +12,9 @@ SHA256 de la fuente: b5c989fcf237ea182162e3967ca5462bbaad413947f7cbc09dfefeaf3d8
 Cambios para Unity, 2026-11-01: reduccion de malla, normalizacion de escala,
 esqueleto y pesos nuevos, siete animaciones originales, espada provisional,
 conversion de mapas PBR y conexion a la IA de Ten Fe.
+Pulido de animaciones, 2026-11-06: siete clips originales regenerados con fases
+de apoyo y avance del pie, preparacion/golpe continuos, recuperacion, reaccion
+de impacto y caida. Autoria local en sentinel_motion.py; misma malla y pesos.
 La fuente original permanece conservada. No se atribuye a Meshy autoria de estos cambios.
 
 Resto de geometria de prototipo, codigo de movimiento, poses primitivas y audio

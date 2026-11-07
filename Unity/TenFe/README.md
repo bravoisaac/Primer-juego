@@ -33,6 +33,8 @@ El mapa incluye el **Claustro de la Memoria**: patio de ceniza con fuente seca, 
 
 La interfaz utiliza paneles de bronce y ceniza y mantiene las proporciones en ventanas 4:3 y 16:9. La barra de vida conserva brevemente el daño reciente; los tres indicadores del cáliz muestran sus cargas. Un vestigio pendiente muestra la fe recuperable. Los avisos de ataque priorizan una sola amenaza cercana con línea de visión.
 
+Los guardianes tienen siete clips renovados: respiración en reposo, caminar/correr con fases de apoyo y avance del pie, preparación conectada al golpe, continuación del arco y recuperación gradual, reacción rápida y caída iniciada en las rodillas. El ritmo de los pasos sigue la velocidad y escala del enemigo. Los impactos leves conservan la zancada y reaccionan con el torso; un nuevo stagger reinicia su reacción completa. Descansar devuelve directamente la postura de reposo. Aster levanta y mueve su arma durante las fases reales de su ataque. La IA sigue controlando movimiento y daño, con contacto al 14 % del golpe.
+
 Puedes pulsar la siguiente acción hasta 200 ms antes de terminar la recuperación de la actual. Se conserva solo la última pulsación: no cancela ataques ni acumula una secuencia. La esquiva retiene la dirección elegida al pulsarla. Si al ejecutar faltan energía, suelo o cálices, el intento se descarta. Pausar, morir, reaparecer o recibir un impacto que interrumpe limpia la acción pendiente.
 
 Al fijar un enemigo, la cámara se desplaza ligeramente hacia el hombro para despejar su silueta. Cerca de una pared se acerca de inmediato y recupera su distancia suavemente al salir. La sacudida de impacto también respeta la colisión.
@@ -64,6 +66,7 @@ Guardado: `%USERPROFILE%\AppData\LocalLow\TenFe\Ten Fe - Santuario del Ocaso\pil
 - `Assets/Art/GildedSentinel`: modelo del usuario con rig, siete clips de animación, materiales y prefab.
 - `Assets/Art/Atmosphere`: cielo con nubes, piedra y bronce erosionados, fuego/brasas, estandartes al viento y acabado de cámara; recursos originales definidos por shaders y una malla editable.
 - `Assets/Editor`: generación, validación y compilación. `SanctuaryExpansion` añade el claustro a la escena guardada sin reconstruir el santuario; conserva referencias de progreso y reubica un custodio y la reliquia existentes.
+- `SentinelAnimationTools` valida los clips importados antes de la compilación de `Validar.ps1`: cierre de ciclos, enlace preparación/golpe, apoyo/elevación de pies, zancada y raíz inmóvil. `EnemyAnimationChecks` verifica la coordinación con IA, reacciones, reinicio, pausa, recuperación y ataque de Aster dentro del ejecutable.
 - `Assets/Scripts/Validation`: comprobaciones dentro del ejecutable con `--smoke-test`; `ResponsivenessChecks` cubre pulsaciones durante recuperación, pausa, restauración y comportamiento de cámara frente a obstáculos.
 - `ExpansionChecks` recorre ambos puentes y la galería con la cápsula real en ambos sentidos, prueba suelo/pretiles, acceso a reliquia y percepción/ataque del custodio reubicado; genera `mapa_claustro.png`, `mapa_nerea.png` y `mapa_general.png`.
 
@@ -73,7 +76,9 @@ Sin paquetes externos, red, cuentas ni servicios dentro del juego. Se utilizan e
 
 Con el editor cerrado, ejecuta `Validar.ps1` desde PowerShell. Compila **la escena guardada** y ejecuta las comprobaciones del ciclo de juego en una sesión aislada. No usa ni sobrescribe tu partida. Los informes y capturas quedan en `Docs/Validation`; los logs, en `Logs`. Durante las capturas de interfaz la ventana de pruebas puede aparecer y cambiar de resolución; se cierra automáticamente al terminar.
 
-Validación más reciente, **2026-11-06: 13 comprobaciones de reglas + 117 de ejecución aprobadas (130 en total)**. Añade diez comprobaciones del mapa ampliado y tres vistas revisadas: `mapa_claustro.png`, `mapa_nerea.png` y `mapa_general.png`. Se recorrieron ambos accesos y la galería con la cápsula real en ambos sentidos, se probaron pretiles, reliquia y custodio. Se corrigieron dos columnas que obstruían los pasos. Reaplicar la ampliación no duplicó geometría. El aviso intermitente de búfer gráfico D3D11 reapareció durante las capturas de la ejecución final; no hubo errores del motor ni fallos de comprobaciones. Siguen pendientes la partida manual, el retorno del custodio por recorridos complejos y la medición de FPS.
+Validación más reciente, **2026-11-06: 11 comprobaciones de clips + 13 de reglas + 130 de ejecución aprobadas (154 en total)**. Las nuevas cubren cierre de ciclos, preparación/golpe continuos, apoyo/elevación de pies, raíz inmóvil, impactos leves/repetidos, pausa, reinicio, coincidencia entre contacto visual y daño único, recuperación y arco de Aster. Se revisaron retratos de marcha/muerte y cuatro capturas adicionales: `animacion_preparacion.png`, `animacion_contacto.png`, `animacion_recuperacion.png`, `animacion_aster.png`. Se corrigió una transición de impacto que persistía brevemente al descansar. El aviso gráfico D3D11 intermitente reapareció; no hubo errores de motor ni fallos finales. Las comprobaciones de huesos no equivalen a contacto perfecto de toda la malla: faltan revisión manual, pesos, agarre y ajuste al terreno.
+
+Validación previa del mapa, **2026-11-06: 130 comprobaciones**. Añadió diez comprobaciones del mapa ampliado y tres vistas revisadas: `mapa_claustro.png`, `mapa_nerea.png` y `mapa_general.png`. Se recorrieron ambos accesos y la galería con la cápsula real en ambos sentidos, se probaron pretiles, reliquia y custodio. Se corrigieron dos columnas que obstruían los pasos. Reaplicar la ampliación no duplicó geometría. Siguen pendientes la partida manual, el retorno del custodio por recorridos complejos y la medición de FPS.
 
 Validación del 2026-11-03: **13 comprobaciones de reglas y guardado + 107 de ejecución aprobadas (120 en total)**. Incluye combate, progresión, movimiento gradual, skin del centinela, ambientación, presentación y 17 comprobaciones nuevas de respuesta de acciones y cámara. Se verifican caducidad y ejecución única de intentos, pausa, gasto de energía, retorno tras obstáculos y colisión al desplazar el encuadre junto a paredes laterales. Se mantienen diez capturas completas de interfaz: juego, ayuda, pausa, altar con bendición máxima, objetivo preparando un golpe, jefe en fase II y muerte. Hay vistas a 1280×720, 1024×768 y 1920×1080. Los archivos `hud_*.png` incluyen IMGUI; las vistas de cámara anteriores lo excluyen. Los clics y teclas físicos, la comodidad del encuadre, el contacto fino de pies y el equilibrio aún requieren la partida manual de `Docs/PRUEBAS_MANUALES.md`.
 
@@ -82,6 +87,14 @@ Vistas de ambientación: `Docs/Validation/atmosfera_entrada.png`, `atmosfera_pat
 La compilación Windows usa deformación de modelos en GPU (`PlayerSettings.meshDeformation`), según la [API oficial de Unity](https://docs.unity.cn/6000.2/Documentation/ScriptReference/PlayerSettings-meshDeformation.html). Esta medida redujo el aviso de búfer gráfico, pero ha reaparecido de forma intermitente; no se considera resuelto. Skin, combate y reaparición pasaron sus comprobaciones.
 
 `ProjectTools.ValidateAndBuild` se reserva para validar la escena original generada y **sí la reconstruye**. Para el trabajo diario usa `ProjectTools.ValidateExistingAndBuild`.
+
+Para regenerar únicamente las animaciones desde la raíz del repositorio, usa Blender instalado:
+
+```powershell
+& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --python .\Tools\Blender\polish_gilded_animations.py
+```
+
+El script abre el rig inicial conservado, reconstruye las siete acciones de `sentinel_motion.py`, actualiza el FBX y guarda una fuente independiente `Assets/Characters/Enemies/GildedSentinel/Source/GildedSentinel_Animated.blend`. No modifica GLB original, malla, pesos ni texturas. El generador completo `rig_gilded_sentinel.py` usa las mismas poses. Después ejecuta `Unity/TenFe/Validar.ps1` con Unity cerrado. Duraciones, nombres de clips y referencia del modelo se conservan; no hace falta reconstruir el mapa.
 
 ## Estado y límites
 

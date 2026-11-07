@@ -1,0 +1,12 @@
+PASSED imported clip checks
+PASS Idle loop closes without a pose jump
+PASS Walk loop closes without a pose jump
+PASS Run loop closes without a pose jump
+PASS Windup ends at the exact opening pose of Strike
+PASS Walk support ankle stays level (variation 0,0009 m)
+PASS Walk swing foot clears the ground (lift 0,0647 m)
+PASS Walk support stride matches playback calibration with no root translation
+PASS Run support ankle stays level (variation 0,0037 m)
+PASS Run swing foot clears the ground (lift 0,1195 m)
+PASS Run support stride matches playback calibration with no root translation
+PASS Both attack feet remain planted through damage contact

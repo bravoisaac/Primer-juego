@@ -1,6 +1,6 @@
 # Primera partida de revisión
 
-Estado: pendiente de realizar con ventana visible y controles físicos. Las 130 comprobaciones automáticas (2026-11-06) y las capturas de interfaz/mapa no sustituyen esta revisión de sensación, legibilidad y dificultad; especialmente falta recorrer el nuevo claustro, comprobar retorno del custodio, valorar los 200 ms de entrada y la cámara de hombro. El aviso intermitente de búfer gráfico D3D11 reapareció durante las capturas; medir FPS y comprobar si también ocurre al jugar.
+Estado: pendiente de realizar con ventana visible y controles físicos. Las 154 comprobaciones automáticas (2026-11-06: 11 de clips, 13 de reglas y 130 de ejecución) y las capturas no sustituyen esta revisión de sensación, legibilidad y dificultad; especialmente falta valorar las animaciones renovadas, recorrer el claustro, comprobar retorno del custodio, los 200 ms de entrada y la cámara de hombro. El aviso intermitente de búfer gráfico D3D11 reapareció durante las capturas; medir FPS y comprobar si también ocurre al jugar.
 
 - [ ] Abrir `Jugar.cmd`; verificar que se ven personaje, escenario, vida, energía y cálices.
 - [ ] Revisar cielo del eclipse, detalle de piedra/bronce, estandartes al viento, fuego y brasas desde entrada, patio y templo; comprobar que las sombras permiten distinguir enemigos y bordes.
@@ -15,6 +15,8 @@ Estado: pendiente de realizar con ventana visible y controles físicos. Las 130 
 - [ ] Fijar un enemigo; verificar marcador, cambio de objetivo y retirada hasta perder fijación.
 - [ ] Comparar alcance y tiempos del ataque ligero y fuerte; comprobar que la señal del enemigo permite anticipar el golpe.
 - [ ] Revisar el centinela Meshy en movimiento: pies, hombros, faldones, agarre de espada, anticipación y momento del impacto. Comprobar su caída y recuperación de pose al descansar.
+- [ ] Observar los clips renovados: pie apoyado frente al pie que avanza, elevación al correr, preparación que conecta con el golpe, retorno gradual del arma y rodillas que ceden antes de caer. Comparar custodios con paladín, cuya escala modifica el ritmo de reproducción.
+- [ ] Dar un golpe ligero durante su desplazamiento: la reacción del torso debe conservar la zancada. Dar dos golpes fuertes sucesivos: la segunda reacción debe comenzar de nuevo. Descansar/reiniciar durante una reacción debe devolver la postura de reposo.
 - [ ] Observar su patrulla desde lejos: debe caminar a un punto cercano, frenar y hacer una pausa. Acercarse desde detrás: debe observar y girar progresivamente antes de acelerar.
 - [ ] Mantener distancia y luego dejar que se acerque: comprobar carrera → caminar → detenerse → anticipar → golpear → recuperarse. Revisar continuidad de las zancadas y posible deslizamiento de pies.
 - [ ] Rodearlo durante la anticipación: debe mantener la dirección comprometida del golpe. Alejarse y descansar: debe regresar sin conservar impulso al reaparecer. Comprobar también paladín y Aster, que comparten la IA.
@@ -29,6 +31,7 @@ Estado: pendiente de realizar con ventana visible y controles físicos. Las 130 
 - [ ] Morir con fe en el claustro y recuperar el vestigio; cerrar y abrir para verificar que reliquia, fe y checkpoint se conservan.
 - [ ] Recorrer el camino este y accionar la palanca; volver por el atajo abierto.
 - [ ] Combatir a Aster, observar el cambio de ritmo por debajo de media vida y derrotarlo.
+- [ ] Revisar que Aster levante el arma durante toda la anticipación, ejecute un arco visible en el contacto y recupere la postura; comprobar también su golpe fuerte y fase II.
 - [ ] Usar Escape; revisar pausa, volumen y sensibilidad. Reanudar y comprobar captura del mouse.
 - [ ] Arrastrar ambos deslizadores hasta sus extremos y volver a un valor cómodo; comprobar números, audio/cámara y conservación tras cerrar y abrir el juego. Revisar estados al pasar el mouse y pulsar Continuar.
 - [ ] Salir, volver a abrir y verificar altar, vitalidad, fe, reliquia, atajo y victoria; el jefe no debe reaparecer.

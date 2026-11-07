@@ -26,6 +26,12 @@ namespace TenFe
         public float MotionSpeed { get; private set; }
         public float WindupDuration { get; private set; } = .8f;
         public float RecoveryDuration { get; private set; } = 1.15f;
+        public const float StrikeContact = .14f;
+        public int AnimationResetVersion { get; private set; }
+        public int StaggerVersion { get; private set; }
+        public bool HeavyAttack => heavy;
+        public float ActionProgress => Mathf.Clamp01(1 - timer / (state == State.Windup ? WindupDuration :
+            state == State.Recover ? RecoveryDuration : state == State.Stagger ? .55f : 1));
         public string Motion => state == State.Dead ? "Death" : state == State.Windup ? "Windup" :
             state == State.Recover ? "Strike" : state == State.Stagger ? "Hit" :
             MotionSpeed > 1.4f ? "Run" : MotionSpeed > .1f ? "Walk" : "Idle";
@@ -49,7 +55,6 @@ namespace TenFe
             if (state == State.Windup)
             {
                 Move(Vector3.zero, 0, attackDirection);
-                visual?.Pose(0, false, false, .15f, true);
                 if (timer <= 0)
                 {
                     state = State.Recover; RecoveryDuration = Enraged ? .65f : boss ? 1.05f : 1.15f;
@@ -61,14 +66,13 @@ namespace TenFe
             {
                 Move(Vector3.zero, 0, Vector3.zero);
                 // The blade reaches its target 14% into the strike clip, after the readable windup.
-                if (state == State.Recover && pendingStrike && timer <= RecoveryDuration * .86f)
+                if (state == State.Recover && pendingStrike && timer <= RecoveryDuration * (1 - StrikeContact))
                 {
                     pendingStrike = false;
                     if (CombatQuery.InArc(transform, player.transform, AttackRange + .55f, heavy ? 85 : 55))
                         player.ReceiveHit(boss ? (heavy ? 38 : 27) : elite ? 25 : 18, transform.position);
                     GameAudio.Play(Cue.Swing);
                 }
-                visual?.Pose(0, false, false, state == State.Recover ? .65f : -1);
                 if (timer <= 0) { timer = state == State.Stagger ? .12f : .22f; state = State.Alert; }
                 return;
             }
@@ -82,7 +86,6 @@ namespace TenFe
             if (state == State.Alert)
             {
                 Move(Vector3.zero, 0, toPlayer);
-                visual?.Pose(MotionSpeed, false, false, -1);
                 if (timer <= 0) state = State.Chase;
                 return;
             }
@@ -90,7 +93,6 @@ namespace TenFe
             {
                 // Plant the feet and face the target before committing to a readable strike.
                 Move(Vector3.zero, 0, toPlayer);
-                visual?.Pose(MotionSpeed, false, false, -1);
                 if (distance > AttackRange + .35f || !CombatQuery.Clear(transform.position + Vector3.up, player.transform.position + Vector3.up))
                 { state = State.Chase; return; }
                 if (timer <= 0 && MotionSpeed < .12f && Vector3.Angle(transform.forward, toPlayer) < 8)
@@ -123,7 +125,7 @@ namespace TenFe
             }
             else
             {
-                if (boss) { Move(Vector3.zero, 0, Vector3.zero); visual?.Pose(0, false, false, -1); return; }
+                if (boss) { Move(Vector3.zero, 0, Vector3.zero); return; }
                 Vector3 toPatrol = patrolTarget - transform.position; toPatrol.y = 0;
                 if (toPatrol.magnitude < .25f)
                 {
@@ -141,8 +143,12 @@ namespace TenFe
             Vector3 movement = destination - transform.position; movement.y = 0;
             movement = movement.magnitude > .2f ? movement.normalized : Vector3.zero;
             Move(movement, speed, movement);
-            visual?.Pose(MotionSpeed, false, false, -1);
             if (transform.position.y < -10) ResetEnemy();
+        }
+        void LateUpdate()
+        {
+            if (GameSession.Instance != null && GameSession.Instance.Paused) return;
+            visual?.PoseEnemy(MotionSpeed, Motion, ActionProgress, heavy);
         }
         void Move(Vector3 direction, float speed, Vector3 facing)
         {
@@ -174,7 +180,7 @@ namespace TenFe
             Health.Damage(damage); GameAudio.Play(Cue.Hit);
             if (Health.IsDead) return;
             Engaged = true;
-            if (stagger && !boss) { state = State.Stagger; timer = .55f; pendingStrike = false; velocity = Vector3.zero; }
+            if (stagger && !boss) { state = State.Stagger; timer = .55f; pendingStrike = false; velocity = Vector3.zero; StaggerVersion++; }
             else if (state == State.Idle || state == State.Return) state = State.Chase;
         }
         void OnDeath()
@@ -184,6 +190,7 @@ namespace TenFe
         }
         public void ResetEnemy()
         {
+            AnimationResetVersion++;
             motor.enabled = false; transform.position = home; transform.rotation = Quaternion.identity;
             motor.enabled = true; Health.Restore(); state = State.Idle; Engaged = false;
             phaseAnnounced = false; attackCount = 0; gravity = 0; pendingStrike = false; MotionSpeed = 0;

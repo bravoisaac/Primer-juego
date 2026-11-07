@@ -5,10 +5,9 @@ not production retopology: armor deformation still needs artistic review.
 """
 import bpy
 import json
-import math
 import hashlib
 from pathlib import Path
-from mathutils import Vector, Quaternion
+from mathutils import Vector
 import numpy as np
 
 ROOT = Path(r"C:\Users\isaac\Documents\Proyectos\Ten Fe")
@@ -22,77 +21,9 @@ def bounds(obj):
     return Vector(tuple(min(p[i] for p in points) for i in range(3))), Vector(tuple(max(p[i] for p in points) for i in range(3)))
 
 
-def world_rotation(bone, axis, degrees):
-    local_axis = bone.bone.matrix_local.to_3x3().inverted() @ Vector(axis)
-    return Quaternion(local_axis, math.radians(degrees))
-
-
-def set_pose(rig, kind, t):
-    for bone in rig.pose.bones:
-        bone.rotation_mode = 'QUATERNION'
-        bone.rotation_quaternion = Quaternion()
-        bone.location = (0, 0, 0)
-    def turn(name, axis, deg):
-        p = rig.pose.bones[name]
-        p.rotation_quaternion = p.rotation_quaternion @ world_rotation(p, axis, deg)
-    def arm(side, drop=64, forward=0, bend=12):
-        sign = 1 if side == 'L' else -1
-        turn('UpperArm.' + side, (0, 1, 0), sign * drop)
-        turn('UpperArm.' + side, (1, 0, 0), forward)
-        turn('Forearm.' + side, (0, 0, 1), -sign * bend)
-    arm('L', 63, -8, 22)
-    arm('R', 62, 2, 16)
-    if kind == 'Idle':
-        breath = math.sin(t * math.tau)
-        turn('Chest', (1, 0, 0), breath * 1.5)
-        turn('Head', (0, 0, 1), breath * 1.8)
-    elif kind in ('Walk', 'Run'):
-        sine = math.sin(t * math.tau)
-        amp = 20 if kind == 'Walk' else 32
-        for side, sign in [('L', 1), ('R', -1)]:
-            swing = sine * sign
-            turn('Thigh.' + side, (1, 0, 0), swing * amp)
-            turn('Shin.' + side, (1, 0, 0), -max(0, -swing) * (28 if kind == 'Walk' else 50))
-            turn('Foot.' + side, (1, 0, 0), max(0, -swing) * 12)
-            turn('UpperArm.' + side, (1, 0, 0), -swing * amp * .4)
-        turn('Hips', (0, 0, 1), sine * 3)
-        turn('Chest', (0, 0, 1), -sine * 5)
-        turn('Chest', (1, 0, 0), 6 if kind == 'Run' else 2)
-        # Local hip Y is vertical; keep foot penetration small and root motion off.
-        rig.pose.bones['Hips'].location.y = -abs(sine) * .018
-    elif kind == 'Windup':
-        blend = t * t * (3 - 2 * t)
-        turn('UpperArm.R', (0, 1, 0), 85 * blend)
-        turn('UpperArm.R', (0, 0, 1), 35 * blend)
-        turn('Forearm.R', (0, 0, 1), 55 * blend)
-        turn('Chest', (0, 0, 1), -24 * blend)
-        turn('Head', (0, 0, 1), 16 * blend)
-        turn('Thigh.L', (1, 0, 0), 10 * blend)
-    elif kind == 'Strike':
-        # Impact at t=.14 (0.16s). Recover to the ready pose after the follow-through.
-        if t <= .14:
-            b = t / .14
-            raise_arm, twist, bend, chest = 85 * (1-b) - 12*b, 35*(1-b) - 65*b, 55*(1-b), -24*(1-b)+20*b
-        else:
-            b = min(1, (t-.14)/.86)
-            raise_arm, twist, bend, chest = -12*(1-b), -65*(1-b), 0, 20*(1-b)
-        turn('UpperArm.R', (0, 1, 0), raise_arm)
-        turn('UpperArm.R', (0, 0, 1), twist)
-        turn('Forearm.R', (0, 0, 1), bend)
-        turn('Chest', (0, 0, 1), chest)
-    elif kind == 'Hit':
-        amount = math.sin(t * math.pi)
-        turn('Chest', (1, 0, 0), -14*amount)
-        turn('Head', (1, 0, 0), -12*amount)
-        turn('Hips', (0, 0, 1), 6*amount)
-    elif kind == 'Death':
-        b = t*t*(3-2*t)
-        # Root tips the complete rig; feet and hips follow one coherent motion.
-        turn('Root', (1, 0, 0), -86*b)
-        rig.pose.bones['Root'].location.y = .13*b
-        turn('Thigh.L', (1, 0, 0), 12*b)
-        turn('Shin.L', (1, 0, 0), -22*b)
-        turn('UpperArm.L', (0, 1, 0), -15*b)
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from sentinel_motion import DURATIONS, set_pose
 
 
 def create_rig(mesh):
@@ -228,10 +159,10 @@ def main():
     for poly in mesh.data.polygons: poly.use_smooth=True
     rig=create_rig(mesh); sword=add_weapon(rig)
     rig.animation_data_create(); scene=bpy.context.scene; scene.render.fps=30
-    durations={'Idle':60,'Walk':36,'Run':24,'Windup':24,'Strike':35,'Hit':15,'Death':42}
+    durations=DURATIONS
     for name,end in durations.items():
         action=bpy.data.actions.new(name); action.use_fake_user=True; rig.animation_data.action=action
-        for frame in sorted(set(range(1,end+2,3))|{1,end+1}):
+        for frame in range(1,end+2):
             set_pose(rig,name,(frame-1)/end)
             for bone in rig.pose.bones:
                 bone.keyframe_insert('rotation_quaternion',frame=frame,group=bone.name)

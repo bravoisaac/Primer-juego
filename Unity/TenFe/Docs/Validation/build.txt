@@ -1,13 +1,15 @@
 Unity 6000.3.26f1; Windows x64; Direct3D 11; Development build.
 Validation completed: 2026-11-06 (America/Santiago), via Validar.ps1, exit code 0.
-13 core checks + 117 runtime checks = 130 passed.
-West cloister adds 1,800 square metres of platform (about 85% over the original 2,112 square metres, before obstacles).
-New courtyard, covered gallery, two connecting bridges, Nerea shrine. One existing guardian and the existing relic relocated.
-10 new checks cover expansion presence, continuous ground, bidirectional capsule traversal, relic interaction, checkpoint/shortcut references, parapets, guardian perception/attack and three rendered map views.
-Two columns initially blocked bridge approaches; both repositioned in saved scene and builder, traversal checks now pass.
-Expansion installer reapplied successfully without duplicating the wing (one root remains).
-Map previews reviewed: mapa_claustro.png, mapa_nerea.png, mapa_general.png. Existing HUD and combat captures regenerated.
-Assembly-CSharp.dll SHA256: 19301ABD689922668972E771F745792B9197037CBB4C65D10CE52ECF8AFE19F4
-Attribution included in Builds/Windows/THIRD_PARTY_NOTICES.txt.
-No engine errors. The known intermittent D3D11 Graphics Ring Buffer warning occurred during the final capture run and remains unresolved.
-Manual playthrough, guardian return around complex obstacles, timing/balance and FPS at 1080p remain pending. No 15-30 minute demo claim.
+11 imported clip checks + 13 core checks + 130 runtime checks = 154 passed.
+Seven original sentinel clips rebaked on the existing 20-bone rig; unchanged mesh, weights, textures, clip names/durations and expanded map.
+Shared authored source: Tools/Blender/sentinel_motion.py; animation-only rebake: polish_gilded_animations.py.
+Original GLB and initial rigged blend preserved; new editable source: GildedSentinel_Animated.blend.
+Clip checks: seamless Idle/Walk/Run loops, continuous Windup/Strike pose, level support ankles, swing clearance, calibrated stride, stationary root, planted attack feet.
+Measured support ankle height variation: Walk 0.0009 m, Run 0.0037 m. This validates bone trajectories, not perfect mesh contact or terrain IK.
+Runtime checks: light-hit locomotion, repeated stagger restart, paused skeleton, live reset, visual progress/damage contact, hand arc, late recovery without duplicate damage, Aster anticipation and contact.
+Fixed residual Hit transition after live reset; late recovery verified at phase 0.82, hand displacement 0.186 m from contact.
+Reviewed locomotion/death portraits and animacion_preparacion.png, animacion_contacto.png, animacion_recuperacion.png, animacion_aster.png.
+Assembly-CSharp.dll SHA256: E4E56C7F8F62AD9E95B8A48C231F02583351E0A4A1EA774E03E9802A65296A8E
+Updated attribution included in Builds/Windows/THIRD_PARTY_NOTICES.txt.
+No engine errors. Known intermittent D3D11 Graphics Ring Buffer warning occurred in the final run and remains unresolved.
+Manual playthrough, skin weights, finger grip, terrain IK, LOD and FPS testing remain pending.

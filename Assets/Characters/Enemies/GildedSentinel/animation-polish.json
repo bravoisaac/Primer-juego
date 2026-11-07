@@ -1,0 +1,28 @@
+{
+  "animations": {
+    "Idle": 60,
+    "Walk": 36,
+    "Run": 24,
+    "Windup": 24,
+    "Strike": 35,
+    "Hit": 15,
+    "Death": 42
+  },
+  "fps": 30,
+  "vertices": 40697,
+  "bones": 20,
+  "source_sha256": "b5c989fcf237ea182162e3967ca5462bbaad413947f7cbc09dfefeaf3d87b421",
+  "changes": [
+    "two-link leg solve and level ankles",
+    "stance/swing timing with toe clearance",
+    "continuous windup-to-strike pose",
+    "follow-through and eased recovery",
+    "fast recoil",
+    "knees buckle before falling"
+  ],
+  "limits": [
+    "approximate existing skin weights",
+    "no runtime ground IK",
+    "manual artistic review pending"
+  ]
+}
