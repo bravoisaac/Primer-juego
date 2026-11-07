@@ -1,6 +1,6 @@
 # Primera partida de revisión
 
-Estado: pendiente de realizar con ventana visible y controles físicos. Las 120 comprobaciones automáticas (2026-11-03) y las capturas de interfaz no sustituyen esta revisión de sensación, legibilidad y dificultad; especialmente falta valorar la nueva ventana de entrada de 200 ms y la cámara de hombro.
+Estado: pendiente de realizar con ventana visible y controles físicos. Las 130 comprobaciones automáticas (2026-11-06) y las capturas de interfaz/mapa no sustituyen esta revisión de sensación, legibilidad y dificultad; especialmente falta recorrer el nuevo claustro, comprobar retorno del custodio, valorar los 200 ms de entrada y la cámara de hombro. El aviso intermitente de búfer gráfico D3D11 reapareció durante las capturas; medir FPS y comprobar si también ocurre al jugar.
 
 - [ ] Abrir `Jugar.cmd`; verificar que se ven personaje, escenario, vida, energía y cálices.
 - [ ] Revisar cielo del eclipse, detalle de piedra/bronce, estandartes al viento, fuego y brasas desde entrada, patio y templo; comprobar que las sombras permiten distinguir enemigos y bordes.
@@ -23,7 +23,11 @@ Estado: pendiente de realizar con ventana visible y controles físicos. Las 120 
 - [ ] Matar un custodio, morir con fe, recuperarla y comprobar su pérdida tras una segunda muerte sin recuperación.
 - [ ] Descansar en ambos altares, comprar vitalidad y comprobar reinicio de enemigos.
 - [ ] Confirmar nombre del altar, coste y +25 de vitalidad en su panel; al alcanzar bendición 5 debe mostrar el máximo sin ofrecer otro precio.
-- [ ] Recorrer el camino lateral, recoger la reliquia y accionar la palanca; volver por el atajo abierto.
+- [ ] Desde el primer altar, cruzar el puente oeste y recorrer el patio de ceniza; comprobar ancho del acceso, pretiles y cámara junto a las columnas y fuente.
+- [ ] Enfrentarse al custodio del patio, alejarse por ambos puentes y comprobar que regresa sin atascarse en pilares, fuente o portal.
+- [ ] Seguir las losas claras hasta la galería, recoger la reliquia frente al retablo y regresar por el puente norte; recorrer el circuito en sentido inverso. Revisar orientación y duración real de la exploración.
+- [ ] Morir con fe en el claustro y recuperar el vestigio; cerrar y abrir para verificar que reliquia, fe y checkpoint se conservan.
+- [ ] Recorrer el camino este y accionar la palanca; volver por el atajo abierto.
 - [ ] Combatir a Aster, observar el cambio de ritmo por debajo de media vida y derrotarlo.
 - [ ] Usar Escape; revisar pausa, volumen y sensibilidad. Reanudar y comprobar captura del mouse.
 - [ ] Arrastrar ambos deslizadores hasta sus extremos y volver a un valor cómodo; comprobar números, audio/cámara y conservación tras cerrar y abrir el juego. Revisar estados al pasar el mouse y pulsar Continuar.

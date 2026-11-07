@@ -34,6 +34,7 @@ namespace TenFe.Editor
             PlayerSettings.companyName = "TenFe"; PlayerSettings.productName = "Ten Fe - Santuario del Ocaso";
             SentinelInstaller.AttachToEnemies(generatedGame);
             AtmosphereInstaller.ApplyToScene();
+            SanctuaryExpansion.ApplyToScene();
             PlayerSettings.defaultScreenWidth = 1280; PlayerSettings.defaultScreenHeight = 720;
             PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
             PlayerSettings.runInBackground = true;

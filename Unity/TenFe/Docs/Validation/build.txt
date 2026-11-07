@@ -1,11 +1,13 @@
 Unity 6000.3.26f1; Windows x64; Direct3D 11; Development build.
-Validation completed: 2026-11-03 (America/Santiago).
-13 core checks + 107 runtime checks = 120 passed.
-17 new checks cover single-intent buffering, expiry, direction, stamina, pause, restore and camera collision/recovery.
-Camera: immediate contraction, gradual return, lock-on shoulder framing and collision-limited hit shake.
-Damage, stamina costs, attack duration, scene geometry, AI and save schema unchanged.
-10 complete IMGUI captures regenerated at 1280x720, 1024x768 and 1920x1080; combat framing reviewed.
-Assembly-CSharp.dll SHA256: 3AA37908D64E876550224AF53E70E051845CA222962B299F852D5C85A1AE35C2
+Validation completed: 2026-11-06 (America/Santiago), via Validar.ps1, exit code 0.
+13 core checks + 117 runtime checks = 130 passed.
+West cloister adds 1,800 square metres of platform (about 85% over the original 2,112 square metres, before obstacles).
+New courtyard, covered gallery, two connecting bridges, Nerea shrine. One existing guardian and the existing relic relocated.
+10 new checks cover expansion presence, continuous ground, bidirectional capsule traversal, relic interaction, checkpoint/shortcut references, parapets, guardian perception/attack and three rendered map views.
+Two columns initially blocked bridge approaches; both repositioned in saved scene and builder, traversal checks now pass.
+Expansion installer reapplied successfully without duplicating the wing (one root remains).
+Map previews reviewed: mapa_claustro.png, mapa_nerea.png, mapa_general.png. Existing HUD and combat captures regenerated.
+Assembly-CSharp.dll SHA256: 19301ABD689922668972E771F745792B9197037CBB4C65D10CE52ECF8AFE19F4
 Attribution included in Builds/Windows/THIRD_PARTY_NOTICES.txt.
-Final runtime log contains no engine errors or graphics ring buffer warning.
-Physical input, comfort of buffering/camera, full manual playthrough and external performance testing remain pending.
+No engine errors. The known intermittent D3D11 Graphics Ring Buffer warning occurred during the final capture run and remains unresolved.
+Manual playthrough, guardian return around complex obstacles, timing/balance and FPS at 1080p remain pending. No 15-30 minute demo claim.

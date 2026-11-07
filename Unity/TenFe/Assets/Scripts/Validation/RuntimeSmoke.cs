@@ -49,6 +49,7 @@ namespace TenFe
             Check(controller.isGrounded, "Ground collision at spawn (position=" + player.transform.position + ", flags=" + controller.collisionFlags + ", minimum=" + controller.minMoveDistance + ")");
             Check(game.Enemies.Count == 4 && game.altars.Length == 2, "Four enemies and two checkpoints");
             yield return ValidateAtmosphere(game);
+            yield return ExpansionChecks.Run(game, Check, CaptureScene, ConfigureAtmosphereCamera);
             CaptureScene(player.orbit.GetComponent<Camera>(), "santuario.png");
             yield return new WaitForSeconds(.2f);
 

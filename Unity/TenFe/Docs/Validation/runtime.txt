@@ -12,6 +12,16 @@ PASS Fire, embers and ash are active within the particle budget
 PASS Camera renders non-black scene: atmosfera_entrada.png
 PASS Camera renders non-black scene: atmosfera_patio.png
 PASS Camera renders non-black scene: atmosfera_templo.png
+PASS Expanded west cloister is present in the saved scene
+PASS Both bridges, cloister loop and relic approach have continuous level ground
+PASS Player capsule traverses the full expansion in both directions without obstruction or falling
+PASS Nerea relic is reachable through the gallery interaction radius
+PASS Expansion preserves the locked east shortcut and both checkpoint references
+PASS Courtyard edges and both bridge parapets stop the player capsule
+PASS Relocated courtyard guardian perceives, approaches and prepares an attack on the new ground
+PASS Camera renders non-black scene: mapa_claustro.png
+PASS Camera renders non-black scene: mapa_nerea.png
+PASS Camera renders non-black scene: mapa_general.png
 PASS Camera renders non-black scene: santuario.png
 PASS Enemy detects player and announces its strike
 PASS Enemy windup resolves into damage

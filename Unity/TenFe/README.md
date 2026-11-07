@@ -1,6 +1,6 @@
 # Ten Fe · Santuario del Ocaso
 
-Base soulslike original para Windows, creada desde cero en **Unity 6.3 / 6000.3.26f1**. Un peregrino recorre el santuario de un panteón extinguido y recupera la chispa de Aster, dios del Ocaso. Nerea, diosa de la memoria, conserva una reliquia en el camino del regreso. Estos nombres son una propuesta inicial editable.
+Base soulslike original para Windows, creada desde cero en **Unity 6.3 / 6000.3.26f1**. Un peregrino recorre el santuario de un panteón extinguido y recupera la chispa de Aster, dios del Ocaso. Nerea, diosa de la memoria, conserva una reliquia en la galería del claustro oeste. Estos nombres son una propuesta inicial editable.
 
 ## Jugar
 
@@ -11,6 +11,8 @@ Abre `Builds/Windows/TenFe.exe` o ejecuta `Jugar.cmd`. Mantén el ejecutable jun
 En Unity Hub elige **Add / Add project from disk** y selecciona esta carpeta (`Unity/TenFe`, no la raíz del proyecto Unreal). Usa el editor **6000.3.26f1** instalado. Abre `Assets/Scenes/Santuario.unity` y pulsa Play. También puedes usar `AbrirUnity.cmd`.
 
 La escena contiene geometría, personajes y referencias editables. `Ten Fe > Crear o reconstruir santuario` reconstruye la escena original: guarda primero tus cambios manuales en otra escena. `Ten Fe > Compilar Windows` compila la escena guardada sin reconstruirla.
+
+El mapa incluye el **Claustro de la Memoria**: patio de ceniza con fuente seca, galería con sepulcros y retablo de Nerea, conectados al santuario por dos puentes. Añade 1.800 m² de plataforma a los 2.112 m² originales (aproximadamente +85 %, antes de descontar obstáculos), con un ancho total aproximado de 70 m. `Ten Fe > Ampliar santuario con claustro oeste` actualiza una escena antigua de forma aditiva; si el claustro ya existe, conserva sus cambios manuales. La reconstrucción completa también lo incluye. La superficie no acredita una duración de juego concreta.
 
 `Ten Fe > Aplicar ambientación al santuario guardado` actualiza luz, cielo, materiales y efectos de la escena existente. Conserva la geometría y las colisiones, pero vuelve a aplicar los valores artísticos de `AtmosphereInstaller.cs`. Para ajustes cotidianos, edita los materiales de `Assets/Art/Atmosphere`, las luces o `SanctuaryImageEffect` en la cámara y compila normalmente.
 
@@ -40,9 +42,9 @@ En un altar, el panel muestra el coste de la bendición y sus +25 de vida, o ind
 ## Recorrido y reglas
 
 1. Avanza desde las estatuas hasta la llama dorada y descansa.
-2. Cruza el primer arco. Los custodios anuncian sus golpes: esquiva y aprovecha su recuperación. Un ataque fuerte interrumpe a los enemigos comunes.
+2. Cruza el primer arco para enfrentarte al custodio de la nave, o toma el puente a la izquierda después del primer altar para explorar el patio de ceniza y su custodio. Anuncian sus golpes: esquiva y aprovecha su recuperación. Un ataque fuerte interrumpe a los enemigos comunes.
 3. El paladín es más resistente. Correr, atacar, bloquear y esquivar consumen energía; una guardia agotada se rompe.
-4. A la derecha, antes del templo, encontrarás el segundo altar y el acceso al camino lateral. La palanca abre la reja del regreso; la reliquia de Nerea entrega 75 de fe.
+4. Desde el patio oeste, sigue las losas claras hasta el portal de la galería. La reliquia de Nerea está frente al retablo del fondo y entrega 75 de fe. El puente norte devuelve a la nave, cerca del segundo altar. A la derecha del altar continúa el camino este: su palanca abre la reja del regreso al santuario.
 5. Usa fe para aumentar la vida en un altar. Descansar restaura recursos y reinicia enemigos comunes. Los enemigos cercanos en combate impiden descansar.
 6. Aster cambia de ritmo al bajar de media vida. Su derrota se conserva al descansar y al cargar.
 
@@ -61,8 +63,9 @@ Guardado: `%USERPROFILE%\AppData\LocalLow\TenFe\Ten Fe - Santuario del Ocaso\pil
 - `SanctuaryAtmosphere` anima la intensidad de las llamas; `SanctuaryImageEffect` añade brillo suave y viñeta, con retorno al renderizado normal si el shader no está disponible.
 - `Assets/Art/GildedSentinel`: modelo del usuario con rig, siete clips de animación, materiales y prefab.
 - `Assets/Art/Atmosphere`: cielo con nubes, piedra y bronce erosionados, fuego/brasas, estandartes al viento y acabado de cámara; recursos originales definidos por shaders y una malla editable.
-- `Assets/Editor`: generación, validación y compilación.
+- `Assets/Editor`: generación, validación y compilación. `SanctuaryExpansion` añade el claustro a la escena guardada sin reconstruir el santuario; conserva referencias de progreso y reubica un custodio y la reliquia existentes.
 - `Assets/Scripts/Validation`: comprobaciones dentro del ejecutable con `--smoke-test`; `ResponsivenessChecks` cubre pulsaciones durante recuperación, pausa, restauración y comportamiento de cámara frente a obstáculos.
+- `ExpansionChecks` recorre ambos puentes y la galería con la cápsula real en ambos sentidos, prueba suelo/pretiles, acceso a reliquia y percepción/ataque del custodio reubicado; genera `mapa_claustro.png`, `mapa_nerea.png` y `mapa_general.png`.
 
 Sin paquetes externos, red, cuentas ni servicios dentro del juego. Se utilizan el renderizador integrado y el Input Manager del editor para mantener esta base pequeña. La entrada aún no está abstraída para mando ni reasignación.
 
@@ -70,11 +73,13 @@ Sin paquetes externos, red, cuentas ni servicios dentro del juego. Se utilizan e
 
 Con el editor cerrado, ejecuta `Validar.ps1` desde PowerShell. Compila **la escena guardada** y ejecuta las comprobaciones del ciclo de juego en una sesión aislada. No usa ni sobrescribe tu partida. Los informes y capturas quedan en `Docs/Validation`; los logs, en `Logs`. Durante las capturas de interfaz la ventana de pruebas puede aparecer y cambiar de resolución; se cierra automáticamente al terminar.
 
+Validación más reciente, **2026-11-06: 13 comprobaciones de reglas + 117 de ejecución aprobadas (130 en total)**. Añade diez comprobaciones del mapa ampliado y tres vistas revisadas: `mapa_claustro.png`, `mapa_nerea.png` y `mapa_general.png`. Se recorrieron ambos accesos y la galería con la cápsula real en ambos sentidos, se probaron pretiles, reliquia y custodio. Se corrigieron dos columnas que obstruían los pasos. Reaplicar la ampliación no duplicó geometría. El aviso intermitente de búfer gráfico D3D11 reapareció durante las capturas de la ejecución final; no hubo errores del motor ni fallos de comprobaciones. Siguen pendientes la partida manual, el retorno del custodio por recorridos complejos y la medición de FPS.
+
 Validación del 2026-11-03: **13 comprobaciones de reglas y guardado + 107 de ejecución aprobadas (120 en total)**. Incluye combate, progresión, movimiento gradual, skin del centinela, ambientación, presentación y 17 comprobaciones nuevas de respuesta de acciones y cámara. Se verifican caducidad y ejecución única de intentos, pausa, gasto de energía, retorno tras obstáculos y colisión al desplazar el encuadre junto a paredes laterales. Se mantienen diez capturas completas de interfaz: juego, ayuda, pausa, altar con bendición máxima, objetivo preparando un golpe, jefe en fase II y muerte. Hay vistas a 1280×720, 1024×768 y 1920×1080. Los archivos `hud_*.png` incluyen IMGUI; las vistas de cámara anteriores lo excluyen. Los clics y teclas físicos, la comodidad del encuadre, el contacto fino de pies y el equilibrio aún requieren la partida manual de `Docs/PRUEBAS_MANUALES.md`.
 
 Vistas de ambientación: `Docs/Validation/atmosfera_entrada.png`, `atmosfera_patio.png` y `atmosfera_templo.png`. Son capturas del ejecutable sin HUD. Los efectos tienen un máximo conjunto de 920 partículas y el brillo se procesa a un cuarto del ancho/alto de la imagen. Esto limita el coste, pero todavía falta medir FPS a 1080p y probar en otro equipo.
 
-La compilación Windows usa deformación de modelos en GPU (`PlayerSettings.meshDeformation`), según la [API oficial de Unity](https://docs.unity.cn/6000.2/Documentation/ScriptReference/PlayerSettings-meshDeformation.html). En la prueba local final desapareció el aviso de búfer gráfico que aparecía con la deformación en CPU; skin, combate y reaparición pasaron sus comprobaciones.
+La compilación Windows usa deformación de modelos en GPU (`PlayerSettings.meshDeformation`), según la [API oficial de Unity](https://docs.unity.cn/6000.2/Documentation/ScriptReference/PlayerSettings-meshDeformation.html). Esta medida redujo el aviso de búfer gráfico, pero ha reaparecido de forma intermitente; no se considera resuelto. Skin, combate y reaparición pasaron sus comprobaciones.
 
 `ProjectTools.ValidateAndBuild` se reserva para validar la escena original generada y **sí la reconstruye**. Para el trabajo diario usa `ProjectTools.ValidateExistingAndBuild`.
 
